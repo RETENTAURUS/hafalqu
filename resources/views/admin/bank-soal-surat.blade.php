@@ -11,9 +11,9 @@
 @section('header_actions')
   @if($suratAktif)
     <button onclick="openPilihJenisSoalModal()"
-      class="flex items-center gap-1.5 bg-[#115E59] hover:bg-teal-800 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors shadow-sm">
-      <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-       Soal
+      class="w-full sm:w-auto flex items-center justify-center gap-1.5 bg-[#115E59] hover:bg-teal-800 text-white text-xs font-semibold px-3.5 py-2.5 sm:py-2 rounded-xl sm:rounded-lg transition-colors shadow-sm active:scale-95">
+      <svg class="w-4 h-4 sm:w-3.5 sm:h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span>Tambah Soal</span>
     </button>
   @endif
 @endsection
@@ -29,34 +29,53 @@
 @endsection
 
 @section('content')
-<div class="grid grid-cols-12 gap-6 h-full">
+{{-- MOBILE TAB SWITCHER (Tampil hanya di layar HP) --}}
+<div class="flex md:hidden bg-slate-200/70 p-1 rounded-xl mb-4 gap-1">
+  <button id="btnTabSurah" onclick="switchMobileTab('surah')"
+    class="flex-1 py-2 text-xs font-bold rounded-lg text-teal-800 bg-white shadow-sm transition-all">
+    1. Daftar Surah
+  </button>
+  <button id="btnTabSoal" onclick="switchMobileTab('soal')"
+    class="flex-1 py-2 text-xs font-medium rounded-lg text-slate-600 transition-all flex items-center justify-center gap-1">
+    <span>2. Butir Soal</span>
+    @if($suratAktif)
+      <span class="bg-teal-600 text-white text-[10px] px-1.5 py-0.2 rounded-full">{{ $suratAktif->soals_count ?? $suratAktif->soals()->count() }}</span>
+    @endif
+  </button>
+</div>
 
-  {{-- KIRI: Daftar Surah --}}
-  <div class="col-span-12 md:col-span-5 bg-white rounded-2xl border border-slate-200/80 p-6 flex flex-col overflow-hidden shadow-sm">
-    <div class="flex items-center justify-between mb-6 flex-shrink-0">
-      <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Juz {{ $juz->nomor }}</h2>
+<div class="grid grid-cols-12 gap-4 md:gap-6 h-full">
+
+  {{-- PANEL KIRI: Daftar Surah --}}
+  <div id="panelSurah" class="col-span-12 md:col-span-5 bg-white rounded-2xl border border-slate-200/80 p-4 sm:p-6 flex flex-col overflow-hidden shadow-sm">
+    <div class="flex items-center justify-between mb-4 sm:mb-6 flex-shrink-0">
+      <div>
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">Juz {{ $juz->nomor }}</h2>
+        <p class="text-xs text-slate-400 md:hidden">Pilih surah untuk melihat & mengelola soal</p>
+      </div>
       <button onclick="openTambahSurahModal()"
-        class="flex items-center gap-1.5 bg-[#115E59] hover:bg-teal-800 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors shadow-sm">
+        class="flex items-center gap-1.5 bg-[#115E59] hover:bg-teal-800 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors shadow-sm active:scale-95">
         <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
-         Surah
+        <span>Surah</span>
       </button>
     </div>
-    <div class="flex-1 overflow-y-auto pr-1 space-y-3">
+
+    <div class="flex-1 overflow-y-auto pr-1 space-y-2.5 sm:space-y-3 max-h-[60vh] md:max-h-none">
       @forelse($juz->surats as $itemSurat)
         @php $isAktif = $suratAktif && $suratAktif->id == $itemSurat->id; @endphp
         <a href="{{ route('guru.soal.showJuz', ['juz_id' => $juz->id, 'surat_id' => $itemSurat->id]) }}"
-           class="flex items-center p-4 rounded-2xl border transition-all duration-200 {{ $isAktif ? 'bg-teal-50 border-teal-300 shadow-sm' : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/60' }}">
-          <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 mr-3 {{ $isAktif ? 'bg-teal-600 text-white' : 'bg-slate-100 text-slate-600' }}">
-            <span class="text-sm font-bold">{{ $itemSurat->nomor_surat }}</span>
+           class="flex items-center p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border transition-all duration-200 {{ $isAktif ? 'bg-teal-50/90 border-teal-300 shadow-sm' : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/60' }}">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center flex-shrink-0 mr-3 {{ $isAktif ? 'bg-teal-600 text-white' : 'bg-slate-100 text-slate-600' }}">
+            <span class="text-xs sm:text-sm font-bold">{{ $itemSurat->nomor_surat }}</span>
           </div>
           <div class="flex-1 min-w-0">
             <h4 class="font-bold text-slate-800 text-sm truncate">{{ $itemSurat->nama_surat }}</h4>
             @if(!empty($itemSurat->arti_nama))
-              <p class="text-xs text-slate-400 truncate">{{ $itemSurat->arti_nama }}</p>
+              <p class="text-[11px] sm:text-xs text-slate-400 truncate">{{ $itemSurat->arti_nama }}</p>
             @endif
-            <p class="text-xs text-slate-400 font-medium mt-0.5">
+            <p class="text-[11px] sm:text-xs text-slate-400 font-medium mt-0.5">
               {{ $itemSurat->total_ayat }} ayat
               <span class="mx-1">·</span>
               {{ $itemSurat->soals_count ?? $itemSurat->soals()->count() }} soal
@@ -67,21 +86,21 @@
           @endif
         </a>
       @empty
-        <div class="text-center py-12 text-slate-400 text-sm border-2 border-dashed border-slate-100 rounded-xl">
+        <div class="text-center py-10 text-slate-400 text-sm border-2 border-dashed border-slate-100 rounded-xl">
           <svg class="w-8 h-8 mx-auto mb-2 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
           Belum ada surah di Juz ini.<br>
-          <span class="text-xs">Klik <strong> Surah</strong> untuk menambahkan.</span>
+          <span class="text-xs">Klik <strong>+ Surah</strong> untuk menambahkan.</span>
         </div>
       @endforelse
     </div>
   </div>
 
-  {{-- KANAN: Tabel Soal --}}
-  <div class="col-span-12 md:col-span-7 bg-white rounded-2xl border border-slate-200/80 p-6 flex flex-col overflow-hidden shadow-sm">
+  {{-- PANEL KANAN: Daftar Soal --}}
+  <div id="panelSoal" class="hidden md:flex col-span-12 md:col-span-7 bg-white rounded-2xl border border-slate-200/80 p-4 sm:p-6 flex-col overflow-hidden shadow-sm">
     @if($suratAktif)
-      <div class="flex items-center justify-between mb-6 flex-shrink-0">
+      <div class="flex items-center justify-between mb-4 sm:mb-6 flex-shrink-0">
         <div>
-          <h2 class="text-lg font-bold text-slate-800 tracking-tight">{{ $suratAktif->nama_surat }}</h2>
+          <h2 class="text-base sm:text-lg font-bold text-slate-800 tracking-tight">{{ $suratAktif->nama_surat }}</h2>
           <p class="text-xs text-slate-400 mt-0.5">
             Surah ke-{{ $suratAktif->nomor_surat }}
             @if(!empty($suratAktif->nama_arab))
@@ -91,13 +110,76 @@
           </p>
         </div>
         <button onclick="openPilihJenisSoalModal()"
-          class="flex items-center gap-1.5 bg-[#115E59] hover:bg-teal-800 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors shadow-sm">
+          class="flex items-center gap-1.5 bg-[#115E59] hover:bg-teal-800 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors shadow-sm active:scale-95">
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-           Soal
+          <span>Soal</span>
         </button>
       </div>
 
-      <div class="flex-1 overflow-auto rounded-xl border border-slate-100">
+      {{-- 1. TAMPILAN MOBILE: KARTU SOAL --}}
+      <div class="block md:hidden space-y-3 overflow-y-auto max-h-[65vh]">
+        @forelse($suratAktif->soals as $index => $soal)
+          <div class="bg-slate-50/70 border border-slate-200/80 rounded-xl p-3.5 space-y-3">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[10px] font-bold">
+                  {{ $index + 1 }}
+                </span>
+                @php
+                  $kesulitan = $soal->kesulitan ?? 'Mudah';
+                  $badgeClass = match($kesulitan) {
+                    'Sulit'  => 'bg-red-50 text-red-600 border-red-200',
+                    'Sedang' => 'bg-amber-50 text-amber-600 border-amber-200',
+                    default  => 'bg-emerald-50 text-emerald-700 border-emerald-200',
+                  };
+                @endphp
+                <span class="text-[10px] font-semibold px-2 py-0.5 rounded border {{ $badgeClass }}">
+                  {{ $kesulitan }}
+                </span>
+                @if($soal->jenis === 'audio')
+                  <span class="text-[10px] text-teal-700 bg-teal-50 border border-teal-200 px-1.5 py-0.5 rounded font-medium">
+                    Audio
+                  </span>
+                @endif
+              </div>
+              <span class="text-xs font-bold text-slate-700 bg-white px-2 py-0.5 rounded border border-slate-200">
+                {{ $soal->poin ?? 100 }} Pts
+              </span>
+            </div>
+
+            <p class="text-xs sm:text-sm text-slate-800 font-medium leading-relaxed">
+              {{ $soal->pertanyaan }}
+            </p>
+
+            <div class="pt-2 border-t border-slate-200/60 flex items-center justify-end gap-1.5">
+              <button type="button" onclick="bukaModalDetail({{ $soal->id }})"
+                class="flex-1 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-lg text-xs font-medium flex items-center justify-center gap-1 active:bg-slate-100">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Detail
+              </button>
+              <button type="button" onclick="bukaModalEdit({{ $soal->id }})"
+                class="flex-1 py-1.5 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-lg text-xs font-medium flex items-center justify-center gap-1 active:bg-emerald-100">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                Edit
+              </button>
+              <form action="{{ route('guru.soal.destroySoal', $soal->id) }}" method="POST"
+                onsubmit="return confirm('Hapus soal ini dari bank soal?')" class="inline">
+                @csrf @method('DELETE')
+                <button type="submit" class="p-1.5 bg-red-50 border border-red-200 text-red-600 rounded-lg active:bg-red-100">
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16"/></svg>
+                </button>
+              </form>
+            </div>
+          </div>
+        @empty
+          <div class="py-10 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
+            <p class="text-slate-400 text-xs font-medium">Belum ada butir soal.</p>
+          </div>
+        @endforelse
+      </div>
+
+      {{-- 2. TAMPILAN DESKTOP: TABEL SOAL --}}
+      <div class="hidden md:block flex-1 overflow-auto rounded-xl border border-slate-100">
         <table class="w-full text-left border-collapse">
           <thead>
             <tr class="bg-slate-50 text-slate-600 text-xs font-semibold tracking-wide sticky top-0 z-10 border-b border-slate-100">
@@ -111,7 +193,7 @@
           <tbody class="divide-y divide-slate-100 text-slate-700 text-sm">
             @forelse($suratAktif->soals as $index => $soal)
               <tr class="hover:bg-slate-50/80 transition-colors">
-                <td class="py-4 px-4 text-center text-slate-500 font-medium text-xs">{{ $index  + 1 }}</td>
+                <td class="py-4 px-4 text-center text-slate-500 font-medium text-xs">{{ $index + 1 }}</td>
                 <td class="py-4 px-4">
                   <div class="font-medium text-slate-800 text-sm leading-snug line-clamp-2">{{ $soal->pertanyaan }}</div>
                   @if($soal->jenis === 'audio')
@@ -137,31 +219,19 @@
                 <td class="py-4 px-4 text-center font-bold text-slate-800 text-sm">{{ $soal->poin ?? 100 }}</td>
                 <td class="py-4 px-4">
                   <div class="flex items-center justify-center gap-1.5">
-                    {{-- Tombol Detail --}}
-                    <button type="button" title="Detail"
-                      onclick="bukaModalDetail({{ $soal->id }})"
+                    <button type="button" title="Detail" onclick="bukaModalDetail({{ $soal->id }})"
                       class="p-1.5 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200 transition-colors">
-                      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                      </svg>
+                      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </button>
-                    {{-- Tombol Edit --}}
-                    <button type="button" title="Edit"
-                      onclick="bukaModalEdit({{ $soal->id }})"
+                    <button type="button" title="Edit" onclick="bukaModalEdit({{ $soal->id }})"
                       class="p-1.5 bg-emerald-50 text-emerald-700 rounded-lg hover:bg-emerald-100 transition-colors">
-                      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-                      </svg>
+                      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                     </button>
-                    {{-- Tombol Hapus --}}
                     <form action="{{ route('guru.soal.destroySoal', $soal->id) }}" method="POST"
                       onsubmit="return confirm('Hapus soal ini dari bank soal?')">
                       @csrf @method('DELETE')
-                      <button type="submit" title="Hapus"
-                        class="p-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors">
-                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                          <path d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16"/>
-                        </svg>
+                      <button type="submit" title="Hapus" class="p-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16"/></svg>
                       </button>
                     </form>
                   </div>
@@ -181,10 +251,10 @@
       </div>
 
     @else
-      <div class="flex-1 flex flex-col items-center justify-center text-center p-6 border-2 border-dashed border-slate-100 rounded-2xl bg-slate-50/50">
+      <div class="flex-1 flex flex-col items-center justify-center text-center p-6 border-2 border-dashed border-slate-100 rounded-2xl bg-slate-50/50 min-h-[250px]">
         <svg class="w-12 h-12 text-slate-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg>
         <h4 class="font-bold text-slate-700 text-base">Silakan Pilih Surah</h4>
-        <p class="text-xs text-slate-400 max-w-xs mt-1">Klik salah satu daftar surah di panel sebelah kiri untuk memunculkan tabel bank soal hafalan.</p>
+        <p class="text-xs text-slate-400 max-w-xs mt-1">Klik salah satu daftar surah di panel sebelah kiri untuk memunculkan bank soal.</p>
       </div>
     @endif
   </div>
@@ -196,52 +266,51 @@
 
 {{-- ══ MODAL TAMBAH SURAH ══════════════════════════════ --}}
 <div id="tambahSurahModal"
-     class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4 modal-backdrop"
+     class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 modal-backdrop"
      style="backdrop-filter:blur(2px)">
-  <div class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden">
-    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-center justify-between">
+  <div class="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
+    <div class="px-5 sm:px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
       <h3 class="text-sm font-bold text-slate-800">Tambah Surah ke Juz {{ $juz->nomor }}</h3>
-      <button onclick="closeTambahSurahModal()"
-        class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 transition-colors">
+      <button onclick="closeTambahSurahModal()" class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
-    <form action="{{ route('guru.soal.storeSurat', $juz->id) }}" method="POST">
+    <form action="{{ route('guru.soal.storeSurat', $juz->id) }}" method="POST" class="overflow-y-auto flex-1">
       @csrf
-      <div class="px-6 py-5 space-y-4">
-        <div class="grid grid-cols-2 gap-4">
+      <div class="p-5 sm:p-6 space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1.5">Nama Surah <span class="text-red-500">*</span></label>
             <input type="text" name="nama_surat" placeholder="cth. Al-Fatihah" value="{{ old('nama_surat') }}" required
-              class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600">
+              class="w-full border border-slate-200 rounded-lg px-3 py-2.5 sm:py-2 text-sm text-slate-800 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600">
           </div>
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1.5">Nama Arab</label>
-            <input type="text" name="nama_arab" placeholder="cth. الفatحة" value="{{ old('nama_arab') }}" dir="rtl"
-              class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600">
+            <input type="text" name="nama_arab" placeholder="cth. الفاتحة" value="{{ old('nama_arab') }}" dir="rtl"
+              class="w-full border border-slate-200 rounded-lg px-3 py-2.5 sm:py-2 text-sm text-slate-800 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600">
           </div>
         </div>
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-2 gap-3 sm:gap-4">
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1.5">Nomor Surah <span class="text-red-500">*</span></label>
             <input type="number" name="nomor_surat" min="1" max="114" placeholder="1 — 114" value="{{ old('nomor_surat') }}" required
-              class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600">
+              class="w-full border border-slate-200 rounded-lg px-3 py-2.5 sm:py-2 text-sm text-slate-800 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600">
           </div>
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1.5">Jumlah Ayat <span class="text-red-500">*</span></label>
             <input type="number" name="total_ayat" min="1" placeholder="cth. 7" value="{{ old('total_ayat') }}" required
-              class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600">
+              class="w-full border border-slate-200 rounded-lg px-3 py-2.5 sm:py-2 text-sm text-slate-800 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600">
           </div>
         </div>
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5">Arti Nama Surah</label>
           <input type="text" name="arti_nama" placeholder="cth. Pembuka" value="{{ old('arti_nama') }}"
-            class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600">
+            class="w-full border border-slate-200 rounded-lg px-3 py-2.5 sm:py-2 text-sm text-slate-800 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600">
         </div>
       </div>
-      <div class="px-6 pb-5 flex justify-end gap-2 border-t border-slate-100 pt-4">
-        <button type="button" onclick="closeTambahSurahModal()" class="border border-slate-200 text-slate-600 text-xs font-semibold px-4 py-2 rounded-lg hover:bg-slate-50">Batal</button>
-        <button type="submit" class="bg-[#115E59] text-white text-xs font-semibold px-5 py-2 rounded-lg hover:bg-teal-800 shadow-sm">Simpan</button>
+      <div class="p-4 sm:p-6 flex justify-end gap-2 border-t border-slate-100 bg-slate-50/50">
+        <button type="button" onclick="closeTambahSurahModal()" class="flex-1 sm:flex-none border border-slate-200 text-slate-600 text-xs font-semibold px-4 py-2.5 rounded-xl sm:rounded-lg">Batal</button>
+        <button type="submit" class="flex-1 sm:flex-none bg-[#115E59] text-white text-xs font-semibold px-5 py-2.5 rounded-xl sm:rounded-lg shadow-sm">Simpan</button>
       </div>
     </form>
   </div>
@@ -249,37 +318,36 @@
 
 {{-- ══ MODAL PILIH JENIS SOAL ══════════════════════════ --}}
 <div id="pilihJenisSoalModal"
-     class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4 modal-backdrop"
+     class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 modal-backdrop"
      style="backdrop-filter:blur(2px)">
-  <div class="bg-white w-full max-w-2xl rounded-2xl shadow-xl overflow-hidden">
-    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-center justify-between">
+  <div class="bg-white w-full sm:max-w-2xl rounded-t-2xl sm:rounded-2xl shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
+    <div class="px-5 sm:px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
       <h3 class="text-sm font-bold text-slate-800">Pilih Jenis Soal</h3>
-      <button onclick="closePilihJenisSoalModal()"
-        class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 transition-colors">
+      <button onclick="closePilihJenisSoalModal()" class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
-    <div class="px-6 py-5 grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div class="jenis-card rounded-xl p-4 flex items-start gap-3 border border-slate-200" data-type="melanjutkan" onclick="pilihJenis(this)">
+    <div class="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 overflow-y-auto">
+      <div class="jenis-card rounded-xl p-3.5 sm:p-4 flex items-start gap-3 border border-slate-200" data-type="melanjutkan" onclick="pilihJenis(this)">
         <div class="icon-wrapper bg-indigo-50 text-indigo-600"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h10M4 18h6" stroke-linecap="round"/></svg></div>
-        <div><h4 class="text-sm font-bold text-slate-800">Melanjutkan Ayat</h4><p class="text-xs text-slate-500 mt-0.5">Siswa melanjutkan potongan ayat yang ditampilkan hingga selesai</p></div>
+        <div><h4 class="text-sm font-bold text-slate-800">Melanjutkan Ayat</h4><p class="text-xs text-slate-500 mt-0.5">Siswa melanjutkan potongan ayat yang ditampilkan</p></div>
       </div>
-      <div class="jenis-card rounded-xl p-4 flex items-start gap-3 border border-slate-200" data-type="mengisi" onclick="pilihJenis(this)">
+      <div class="jenis-card rounded-xl p-3.5 sm:p-4 flex items-start gap-3 border border-slate-200" data-type="mengisi" onclick="pilihJenis(this)">
         <div class="icon-wrapper bg-emerald-50 text-emerald-600"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z" stroke-linecap="round"/></svg></div>
-        <div><h4 class="text-sm font-bold text-slate-800">Mengisi Ayat Kosong</h4><p class="text-xs text-slate-500 mt-0.5">Ayat ditampilkan dengan kata yang dikosongkan, siswa memilih jawaban yang benar</p></div>
+        <div><h4 class="text-sm font-bold text-slate-800">Mengisi Ayat Kosong</h4><p class="text-xs text-slate-500 mt-0.5">Ayat dengan kata rumpang/dikosongkan</p></div>
       </div>
-      <div class="jenis-card rounded-xl p-4 flex items-start gap-3 border border-slate-200" data-type="pengetahuan" onclick="pilihJenis(this)">
+      <div class="jenis-card rounded-xl p-3.5 sm:p-4 flex items-start gap-3 border border-slate-200" data-type="pengetahuan" onclick="pilihJenis(this)">
         <div class="icon-wrapper bg-amber-50 text-amber-600"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round"/></svg></div>
-        <div><h4 class="text-sm font-bold text-slate-800">Soal Pengetahuan</h4><p class="text-xs text-slate-500 mt-0.5">Pertanyaan seputar pengetahuan tentang surah</p></div>
+        <div><h4 class="text-sm font-bold text-slate-800">Soal Pengetahuan</h4><p class="text-xs text-slate-500 mt-0.5">Pertanyaan seputar pengetahuan surah</p></div>
       </div>
-      <div class="jenis-card rounded-xl p-4 flex items-start gap-3 border border-slate-200" data-type="audio" onclick="pilihJenis(this)">
+      <div class="jenis-card rounded-xl p-3.5 sm:p-4 flex items-start gap-3 border border-slate-200" data-type="audio" onclick="pilihJenis(this)">
         <div class="icon-wrapper bg-rose-50 text-rose-600"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" stroke-linecap="round"/></svg></div>
-        <div><h4 class="text-sm font-bold text-slate-800">Soal Audio</h4><p class="text-xs text-slate-500 mt-0.5">Siswa mendengarkan audio tilawah lalu menjawab pertanyaan terkait ayat yang dibacakan</p></div>
+        <div><h4 class="text-sm font-bold text-slate-800">Soal Audio</h4><p class="text-xs text-slate-500 mt-0.5">Siswa mendengarkan audio tilawah lalu menjawab</p></div>
       </div>
     </div>
-    <div class="px-6 pb-5 flex justify-end gap-2 border-t border-slate-100 pt-4">
-      <button onclick="closePilihJenisSoalModal()" class="border border-slate-200 text-slate-600 text-xs font-semibold px-4 py-2 rounded-lg hover:bg-slate-50">Batal</button>
-      <button id="lanjutBuatSoalBtn" disabled onclick="lanjutBuatSoal()" class="bg-[#115E59] text-white text-xs font-semibold px-5 py-2 rounded-lg transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-teal-800">Lanjut Buat Soal</button>
+    <div class="p-4 sm:p-6 flex justify-end gap-2 border-t border-slate-100 bg-slate-50/50">
+      <button onclick="closePilihJenisSoalModal()" class="flex-1 sm:flex-none border border-slate-200 text-slate-600 text-xs font-semibold px-4 py-2.5 rounded-xl sm:rounded-lg">Batal</button>
+      <button id="lanjutBuatSoalBtn" disabled onclick="lanjutBuatSoal()" class="flex-1 sm:flex-none bg-[#115E59] text-white text-xs font-semibold px-5 py-2.5 rounded-xl sm:rounded-lg disabled:opacity-50">Lanjut Buat Soal</button>
     </div>
   </div>
 </div>
@@ -287,23 +355,23 @@
 {{-- ══ MODAL TAMBAH SOAL ═══════════════════════════════ --}}
 @if($suratAktif)
 <div id="tambahSoalModal"
-     class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4 modal-backdrop"
+     class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 modal-backdrop"
      style="backdrop-filter:blur(2px)">
-  <div class="bg-white w-full max-w-lg rounded-2xl shadow-xl overflow-hidden">
-    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-center justify-between">
+  <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
+    <div class="px-5 sm:px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
       <div>
         <h3 class="text-sm font-bold text-slate-800" id="tambahSoalTitle">Tambah Soal Baru</h3>
         <p class="text-xs text-slate-400 mt-0.5">{{ $suratAktif->nama_surat }}</p>
       </div>
-      <button onclick="closeTambahSoalModal()" class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 transition-colors">
+      <button onclick="closeTambahSoalModal()" class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
-    <form action="{{ route('guru.soal.storeSoal') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('guru.soal.storeSoal') }}" method="POST" enctype="multipart/form-data" class="overflow-y-auto flex-1">
       @csrf
       <input type="hidden" name="surat_id" value="{{ $suratAktif->id }}">
       <input type="hidden" name="jenis" id="jenisSoalHidden" value="pengetahuan">
-      <div class="px-6 py-5 space-y-4">
+      <div class="p-5 sm:p-6 space-y-4">
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5" id="labelPertanyaan">Pertanyaan <span class="text-red-500">*</span></label>
           <textarea name="pertanyaan" id="inputPertanyaan" rows="3" required placeholder="Tuliskan pertanyaan di sini..."
@@ -316,16 +384,16 @@
             <span class="text-sm font-medium text-slate-500 w-5">{{ $upper }}.</span>
             <input type="text" name="opsi_{{ $lower }}" placeholder="Opsi {{ $upper }}" required
               class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600">
-            <label class="flex items-center gap-1 cursor-pointer text-xs text-slate-500">
+            <label class="flex items-center gap-1 cursor-pointer text-xs text-slate-500 flex-shrink-0">
               <input type="radio" name="jawaban_benar" value="{{ $upper }}" {{ $lower === 'a' ? 'required' : '' }} class="w-4 h-4"> Benar
             </label>
           </div>
           @endforeach
         </div>
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-2 gap-3 sm:gap-4">
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1.5">Kesulitan</label>
-            <select name="kesulitan" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600">
+            <select name="kesulitan" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 bg-white focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600">
               <option value="Mudah">Mudah</option>
               <option value="Sedang">Sedang</option>
               <option value="Sulit">Sulit</option>
@@ -340,13 +408,13 @@
         <div id="audioUploadSection" class="hidden">
           <label class="block text-xs font-semibold text-slate-600 mb-1.5">File Audio <span class="text-red-500">*</span></label>
           <input type="file" name="file_audio" id="inputFileAudio" accept=".mp3,.wav,.ogg"
-            class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100">
+            class="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-teal-700">
           <p class="text-[11px] text-slate-400 mt-1">Format: MP3, WAV, OGG. Maks. 5MB.</p>
         </div>
       </div>
-      <div class="px-6 pb-5 flex justify-end gap-2 border-t border-slate-100 pt-4">
-        <button type="button" onclick="closeTambahSoalModal()" class="border border-slate-200 text-slate-600 text-xs font-semibold px-4 py-2 rounded-lg hover:bg-slate-50">Batal</button>
-        <button type="submit" class="bg-[#115E59] text-white text-xs font-semibold px-5 py-2 rounded-lg hover:bg-teal-800 shadow-sm">Simpan Soal</button>
+      <div class="p-4 sm:p-6 flex justify-end gap-2 border-t border-slate-100 bg-slate-50/50">
+        <button type="button" onclick="closeTambahSoalModal()" class="flex-1 sm:flex-none border border-slate-200 text-slate-600 text-xs font-semibold px-4 py-2.5 rounded-xl sm:rounded-lg">Batal</button>
+        <button type="submit" class="flex-1 sm:flex-none bg-[#115E59] text-white text-xs font-semibold px-5 py-2.5 rounded-xl sm:rounded-lg shadow-sm">Simpan Soal</button>
       </div>
     </form>
   </div>
@@ -355,24 +423,23 @@
 
 {{-- ══ MODAL DETAIL SOAL ═══════════════════════════════ --}}
 <div id="modalDetail"
-     class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4 modal-backdrop"
+     class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 modal-backdrop"
      style="backdrop-filter:blur(2px)">
-  <div class="bg-white w-full max-w-lg rounded-2xl shadow-xl overflow-hidden">
-    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-center justify-between">
+  <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
+    <div class="px-5 sm:px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
       <div>
         <h3 class="text-sm font-bold text-slate-800">Detail Soal</h3>
         <p id="detail-surat" class="text-xs text-slate-400 mt-0.5"></p>
       </div>
-      <button onclick="document.getElementById('modalDetail').classList.add('hidden')"
-        class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 transition-colors">
+      <button onclick="document.getElementById('modalDetail').classList.add('hidden')" class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
-    <div class="px-6 py-5 space-y-4">
+    <div class="p-5 sm:p-6 space-y-4 overflow-y-auto flex-1">
       <div class="flex flex-wrap gap-2">
-        <span id="detail-jenis"      class="text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-700"></span>
-        <span id="detail-kesulitan"  class="text-xs font-semibold px-2.5 py-1 rounded-md"></span>
-        <span id="detail-poin"       class="text-xs font-semibold px-2.5 py-1 rounded-md bg-amber-50 text-amber-700"></span>
+        <span id="detail-jenis" class="text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-700"></span>
+        <span id="detail-kesulitan" class="text-xs font-semibold px-2.5 py-1 rounded-md"></span>
+        <span id="detail-poin" class="text-xs font-semibold px-2.5 py-1 rounded-md bg-amber-50 text-amber-700"></span>
       </div>
       <div>
         <p class="text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Pertanyaan</p>
@@ -386,8 +453,7 @@
         <p class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">Pilihan Jawaban</p>
         <div class="space-y-2">
           @foreach(['A','B','C','D'] as $opt)
-          <div id="detail-opsi-wrap-{{ $opt }}"
-               class="flex items-center gap-2.5 px-3 py-2 rounded-lg border text-sm border-slate-100 bg-white">
+          <div id="detail-opsi-wrap-{{ $opt }}" class="flex items-center gap-2.5 px-3 py-2 rounded-lg border text-sm border-slate-100 bg-white">
             <span class="font-bold text-slate-500 w-5">{{ $opt }}.</span>
             <span id="detail-opsi-{{ $opt }}" class="flex-1 text-slate-700"></span>
             <svg id="detail-check-{{ $opt }}" class="w-4 h-4 text-emerald-600 hidden flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
@@ -396,32 +462,29 @@
         </div>
       </div>
     </div>
-    <div class="px-6 pb-5 flex justify-end border-t border-slate-100 pt-4">
-      <button onclick="document.getElementById('modalDetail').classList.add('hidden')"
-        class="border border-slate-200 text-slate-600 text-xs font-semibold px-4 py-2 rounded-lg hover:bg-slate-50">Tutup</button>
+    <div class="p-4 sm:p-6 flex justify-end border-t border-slate-100 bg-slate-50/50">
+      <button onclick="document.getElementById('modalDetail').classList.add('hidden')" class="w-full sm:w-auto border border-slate-200 text-slate-600 text-xs font-semibold px-5 py-2.5 rounded-xl sm:rounded-lg">Tutup</button>
     </div>
   </div>
 </div>
 
 {{-- ══ MODAL EDIT SOAL ═════════════════════════════════ --}}
 <div id="modalEdit"
-     class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4 modal-backdrop"
+     class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 modal-backdrop"
      style="backdrop-filter:blur(2px)">
-  <div class="bg-white w-full max-w-lg rounded-2xl shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
-    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+  <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
+    <div class="px-5 sm:px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
       <div>
         <h3 class="text-sm font-bold text-slate-800">Edit Soal</h3>
         <p id="edit-jenis-label" class="text-xs text-slate-400 mt-0.5"></p>
       </div>
-      <button onclick="document.getElementById('modalEdit').classList.add('hidden')"
-        class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 transition-colors">
+      <button onclick="document.getElementById('modalEdit').classList.add('hidden')" class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
-    <!-- PERBAIKAN: Ditambahkan enctype agar bisa upload file audio saat edit -->
     <form id="form-edit" method="POST" enctype="multipart/form-data" class="flex flex-col flex-1 overflow-hidden">
       @csrf @method('PUT')
-      <div class="px-6 py-5 space-y-4 overflow-y-auto flex-1">
+      <div class="p-5 sm:p-6 space-y-4 overflow-y-auto flex-1">
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5">Pertanyaan <span class="text-red-500">*</span></label>
           <textarea name="pertanyaan" id="edit-pertanyaan" rows="3" required
@@ -434,17 +497,17 @@
             <span class="text-sm font-medium text-slate-500 w-5">{{ $upper }}.</span>
             <input type="text" name="opsi_{{ $lower }}" id="edit-opsi-{{ $lower }}" required placeholder="Opsi {{ $upper }}"
               class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600">
-            <label class="flex items-center gap-1 cursor-pointer text-xs text-slate-500">
+            <label class="flex items-center gap-1 cursor-pointer text-xs text-slate-500 flex-shrink-0">
               <input type="radio" name="jawaban_benar" id="edit-jwb-{{ $upper }}" value="{{ $upper }}" class="w-4 h-4"> Benar
             </label>
           </div>
           @endforeach
         </div>
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-2 gap-3 sm:gap-4">
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1.5">Kesulitan</label>
             <select name="kesulitan" id="edit-kesulitan"
-              class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600">
+              class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 bg-white focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600">
               <option value="Mudah">Mudah</option>
               <option value="Sedang">Sedang</option>
               <option value="Sulit">Sulit</option>
@@ -459,17 +522,17 @@
         <div id="edit-audio-wrap" class="hidden">
           <label class="block text-xs font-semibold text-slate-600 mb-1.5">Ganti File Audio</label>
           <input type="file" name="file_audio" accept=".mp3,.wav,.ogg"
-            class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-teal-700">
+            class="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-700 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-teal-700">
           <p class="text-[11px] text-slate-400 mt-1">Kosongkan jika tidak ingin mengganti audio.</p>
           <p id="edit-audio-current" class="text-[11px] text-teal-600 mt-1 hidden"></p>
         </div>
         <input type="hidden" name="jenis" id="edit-jenis">
       </div>
-      <div class="px-6 pb-5 flex justify-end gap-2 border-t border-slate-100 pt-4 flex-shrink-0">
+      <div class="p-4 sm:p-6 flex justify-end gap-2 border-t border-slate-100 bg-slate-50/50 flex-shrink-0">
         <button type="button" onclick="document.getElementById('modalEdit').classList.add('hidden')"
-          class="border border-slate-200 text-slate-600 text-xs font-semibold px-4 py-2 rounded-lg hover:bg-slate-50">Batal</button>
+          class="flex-1 sm:flex-none border border-slate-200 text-slate-600 text-xs font-semibold px-4 py-2.5 rounded-xl sm:rounded-lg">Batal</button>
         <button type="submit"
-          class="bg-[#115E59] text-white text-xs font-semibold px-5 py-2 rounded-lg hover:bg-teal-800 shadow-sm">Simpan Perubahan</button>
+          class="flex-1 sm:flex-none bg-[#115E59] text-white text-xs font-semibold px-5 py-2.5 rounded-xl sm:rounded-lg shadow-sm">Simpan Perubahan</button>
       </div>
     </form>
   </div>
@@ -481,6 +544,34 @@
 <script>
   const SOAL_URL = '{{ url("guru/bank-soal/soal") }}';
 
+  // ── Switch Tab Mobile ──────────────────────────
+  function switchMobileTab(tab) {
+    const panelSurah = document.getElementById('panelSurah');
+    const panelSoal  = document.getElementById('panelSoal');
+    const btnSurah   = document.getElementById('btnTabSurah');
+    const btnSoal    = document.getElementById('btnTabSoal');
+
+    if (tab === 'surah') {
+      panelSurah.classList.remove('hidden');
+      panelSoal.classList.add('hidden');
+      btnSurah.className = 'flex-1 py-2 text-xs font-bold rounded-lg text-teal-800 bg-white shadow-sm transition-all';
+      btnSoal.className  = 'flex-1 py-2 text-xs font-medium rounded-lg text-slate-600 transition-all flex items-center justify-center gap-1';
+    } else {
+      panelSurah.classList.add('hidden');
+      panelSoal.classList.remove('hidden');
+      panelSoal.classList.add('flex');
+      btnSoal.className  = 'flex-1 py-2 text-xs font-bold rounded-lg text-teal-800 bg-white shadow-sm transition-all flex items-center justify-center gap-1';
+      btnSurah.className = 'flex-1 py-2 text-xs font-medium rounded-lg text-slate-600 transition-all';
+    }
+  }
+
+  // Auto switch ke tab soal di mobile jika surah terpilih
+  @if($suratAktif)
+    if (window.innerWidth < 768) {
+      switchMobileTab('soal');
+    }
+  @endif
+
   // ── Modal Tambah Surah ────────────────────────
   function openTambahSurahModal()  { document.getElementById('tambahSurahModal').classList.remove('hidden'); }
   function closeTambahSurahModal() { document.getElementById('tambahSurahModal').classList.add('hidden'); }
@@ -488,7 +579,6 @@
   // ── Modal Pilih Jenis Soal ────────────────────
   let selectedJenis = null;
   function openPilihJenisSoalModal() {
-    // Pengaman jika belum pilih surah tapi maksa klik tombol header (+ Soal)
     const modalTambah = document.getElementById('tambahSoalModal');
     if (!modalTambah) {
       alert('Silakan pilih salah satu surah di sebelah kiri terlebih dahulu.');
@@ -537,7 +627,7 @@
     
     if (jenis === 'audio') {
       audioSection.classList.remove('hidden');
-      if (audioInput) audioInput.required = true; // Wajib diisi saat buat baru jenis audio
+      if (audioInput) audioInput.required = true;
     } else {
       audioSection.classList.add('hidden');
       if (audioInput) audioInput.required = false;
@@ -613,7 +703,6 @@
       if (soal.jenis === 'audio') {
         aw.classList.remove('hidden');
         if (soal.file_audio) { 
-          // Ambil nama filenya saja untuk tampilan estetik
           const filename = soal.file_audio.split('/').pop();
           ac.textContent = 'Audio saat ini: ' + filename; 
           ac.classList.remove('hidden'); 

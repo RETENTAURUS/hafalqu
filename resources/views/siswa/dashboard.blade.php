@@ -4,12 +4,56 @@
 @section('page_title', 'Dashboard Siswa')
 @section('page_subtitle', 'Selamat datang, ' . Auth::user()->name)
 
+@section('styles')
+<style>
+  .hero-card {
+    background: #1a3a2e;
+    border-radius: 16px;
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.08);
+  }
+
+  .hero-divider {
+    height: 1px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  @media (min-width: 768px) {
+    .hero-card {
+      grid-template-columns: 1fr auto 1.6fr auto 1fr;
+      align-items: center;
+      gap: 0;
+      padding: 24px 28px;
+    }
+
+    .hero-divider {
+      width: 1px;
+      height: 100%;
+      align-self: stretch;
+      margin: 0 22px;
+    }
+  }
+
+  .quick-action-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: #f0ede6;
+  }
+</style>
+@endsection
+
 @section('content')
 
 {{-- ═══ Hero Card ═══ --}}
-<div style="background:#1a3a2e; border-radius:14px; padding:22px 24px;
-            display:grid; grid-template-columns:1fr auto 1.6fr auto 1fr;
-            align-items:center; margin-bottom:18px; overflow:hidden; position:relative;">
+<div class="hero-card">
 
   {{-- Dekorasi lingkaran --}}
   <div style="position:absolute;right:-40px;top:-50px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.03);pointer-events:none;"></div>
@@ -17,8 +61,8 @@
 
   {{-- Kolom 1: Total Poin --}}
   <div style="position:relative;">
-    <p style="font-size:10px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#8ab89e;margin-bottom:6px;">Total Poin</p>
-    <p style="font-size:42px;font-weight:800;color:#fff;line-height:1;">{{ $totalPoin }}</p>
+    <p style="font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#8ab89e;margin-bottom:6px;">Total Poin</p>
+    <p style="font-size:36px;font-weight:800;color:#fff;line-height:1;">{{ $totalPoin }}</p>
     <p style="font-size:11px;color:#7aab8c;margin-top:4px;">Poin hafalan</p>
     <span style="display:inline-flex;align-items:center;gap:5px;background:#d4a843;color:#5a3200;
                  font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;margin-top:10px;">
@@ -26,19 +70,19 @@
     </span>
   </div>
 
-  <div style="width:1px;background:rgba(255,255,255,0.12);align-self:stretch;margin:0 22px;"></div>
+  <div class="hero-divider"></div>
 
   {{-- Kolom 2: Progress Level --}}
   <div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-      <p style="font-size:10px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#8ab89e;">
+      <p style="font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#8ab89e;">
         Progress ke {{ $labelNextLevel }}
       </p>
-      <span style="font-size:10px;color:#8ab89e;">{{ $progress }}%</span>
+      <span style="font-size:10px;color:#8ab89e;font-weight:600;">{{ $progress }}%</span>
     </div>
 
-    <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:10px;">
-      <span style="font-size:26px;font-weight:800;color:#fff;">{{ $totalPoin }}</span>
+    <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:8px;">
+      <span style="font-size:24px;font-weight:800;color:#fff;">{{ $totalPoin }}</span>
       <span style="font-size:12px;color:#7aab8c;">/ {{ $poinTarget }}</span>
     </div>
 
@@ -52,74 +96,76 @@
       @if($sisaPoin > 0)
         <span style="font-size:10px;color:#7aab8c;">{{ $sisaPoin }} poin lagi</span>
       @else
-        <span style="font-size:10px;color:#d4a843;font-weight:600;">Level tertinggi!</span>
+        <span style="font-size:10px;color:#d4a843;font-weight:700;">Level tertinggi!</span>
       @endif
     </div>
 
     {{-- Lencana dots --}}
     <div style="display:flex;align-items:center;gap:6px;margin-top:12px;">
-      <span style="font-size:10px;color:#8ab89e;">Lencana</span>
-      @for ($i = 1; $i <= max($totalLencana, 1); $i++)
-        <div style="width:16px;height:16px;border-radius:50%;
-                    background:{{ $i <= $lencanaDiraih ? '#d4a843' : 'rgba(255,255,255,0.15)' }};
-                    transition:background 0.3s;"></div>
-      @endfor
-      <span style="font-size:10px;color:#8ab89e;margin-left:2px;">{{ $lencanaDiraih }}/{{ $totalLencana }}</span>
+      <span style="font-size:10px;color:#8ab89e;font-weight:600;">Lencana</span>
+      <div style="display:flex;align-items:center;gap:4px;">
+        @for ($i = 1; $i <= max($totalLencana, 1); $i++)
+          <div style="width:14px;height:14px;border-radius:50%;
+                      background:{{ $i <= $lencanaDiraih ? '#d4a843' : 'rgba(255,255,255,0.15)' }};
+                      transition:background 0.3s;"></div>
+        @endfor
+      </div>
+      <span style="font-size:10px;color:#8ab89e;margin-left:2px;font-weight:600;">{{ $lencanaDiraih }}/{{ $totalLencana }}</span>
     </div>
   </div>
 
-  <div style="width:1px;background:rgba(255,255,255,0.12);align-self:stretch;margin:0 22px;"></div>
+  <div class="hero-divider"></div>
 
   {{-- Kolom 3: Peringkat --}}
   <div>
-    <p style="font-size:10px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#8ab89e;margin-bottom:6px;">Peringkat Kelas</p>
-    <p style="font-size:46px;font-weight:800;color:#d4a843;line-height:1;">#{{ $peringkat }}</p>
+    <p style="font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#8ab89e;margin-bottom:6px;">Peringkat Kelas</p>
+    <p style="font-size:38px;font-weight:800;color:#d4a843;line-height:1;">#{{ $peringkat }}</p>
     <p style="font-size:11px;color:#7aab8c;margin-top:4px;">Dari {{ $totalSiswa }} siswa</p>
   </div>
 </div>
 
 {{-- ═══ Bottom Grid ═══ --}}
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+<div style="display:grid;grid-template-columns:1fr;gap:16px;" class="md:grid-cols-2">
 
   {{-- Panel: Daftar Quiz --}}
-  <div style="background:#fff;border-radius:12px;border:1px solid #e8e4dc;overflow:hidden;">
+  <div style="background:#fff;border-radius:14px;border:1px solid #e8e4dc;overflow:hidden;box-shadow: 0 2px 8px -2px rgba(0,0,0,0.04);">
     <div style="padding:14px 16px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f0ede6;">
       <span style="font-size:13px;font-weight:700;color:#1e3a2a;">Daftar Quiz Tersedia</span>
       <a href="{{ route('siswa.quiz.index') }}"
-         style="font-size:11px;color:#2d7a5f;font-weight:500;text-decoration:none;">Lihat Semua</a>
+         style="font-size:11px;color:#2d7a5f;font-weight:600;text-decoration:none;">Lihat Semua</a>
     </div>
 
     @forelse($quizzes as $quiz)
-    <div style="display:flex;align-items:center;padding:10px 16px;
+    <div style="display:flex;align-items:center;padding:12px 16px;
                 border-bottom:{{ $loop->last ? 'none' : '1px solid #f5f2ec' }};
                 transition:background 0.15s;"
          onmouseover="this.style.background='#faf8f5'" onmouseout="this.style.background='transparent'">
-      <span style="font-size:11px;color:#a09882;font-weight:600;min-width:20px;">{{ $loop->iteration }}</span>
-      <div style="flex:1;min-width:0;">
-        <p style="font-size:12px;font-weight:500;color:#2d3a33;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+      <span style="font-size:11px;color:#a09882;font-weight:700;min-width:22px;">{{ $loop->iteration }}</span>
+      <div style="flex:1;min-width:0;padding-right:8px;">
+        <p style="font-size:12px;font-weight:600;color:#2d3a33;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
           {{ $quiz->title }}
         </p>
-        <p style="font-size:10px;color:#a09882;margin-top:1px;">{{ $quiz->soals->count() }} soal</p>
+        <p style="font-size:10px;color:#a09882;margin-top:2px;">{{ $quiz->soals->count() }} soal</p>
       </div>
       <a href="{{ route('siswa.quiz.index') }}"
-         style="background:#1a3a2e;color:#fff;font-size:10px;font-weight:600;
-                padding:5px 11px;border-radius:6px;text-decoration:none;white-space:nowrap;flex-shrink:0;">
+         style="background:#1a3a2e;color:#fff;font-size:11px;font-weight:600;
+                padding:6px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;flex-shrink:0;">
         Kerjakan
       </a>
     </div>
     @empty
-    <div style="padding:28px 16px;text-align:center;color:#a09882;font-size:12px;">
+    <div style="padding:32px 16px;text-align:center;color:#a09882;font-size:12px;">
       Belum ada quiz tersedia.
     </div>
     @endforelse
   </div>
 
   {{-- Panel: Aksi Cepat --}}
-  <div style="background:#fff;border-radius:12px;border:1px solid #e8e4dc;overflow:hidden;">
+  <div style="background:#fff;border-radius:14px;border:1px solid #e8e4dc;overflow:hidden;box-shadow: 0 2px 8px -2px rgba(0,0,0,0.04);">
     <div style="padding:14px 16px 12px;border-bottom:1px solid #f0ede6;">
       <span style="font-size:13px;font-weight:700;color:#1e3a2a;">Aksi Cepat</span>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#f0ede6;">
+    <div class="quick-action-grid">
       @php
         $aksi = [
           [
@@ -152,12 +198,12 @@
       @foreach($aksi as $item)
       <a href="{{ $item['href'] }}"
          style="background:#fff;display:flex;flex-direction:column;align-items:center;
-                justify-content:center;padding:20px 12px;text-decoration:none;
+                justify-content:center;padding:18px 12px;text-decoration:none;
                 transition:background 0.15s;"
          onmouseover="this.style.background='#f7f5f0'" onmouseout="this.style.background='#fff'">
         <div style="width:40px;height:40px;border-radius:11px;background:{{ $item['bg'] }};
                     color:{{ $item['color'] }};display:flex;align-items:center;
-                    justify-content:center;margin-bottom:9px;">
+                    justify-content:center;margin-bottom:8px;">
           {!! $item['icon'] !!}
         </div>
         <span style="font-size:11px;font-weight:600;color:#3d4a42;text-align:center;line-height:1.4;">

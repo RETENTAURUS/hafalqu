@@ -47,15 +47,15 @@
   .card-gameplay {
     background: #ffffff;
     border: 3px solid #E2E8F0;
-    box-shadow: 0 8px 0 #E2E8F0;
-    border-radius: 24px;
+    box-shadow: 0 6px 0 #E2E8F0;
+    border-radius: 20px;
     transition: all 0.2s ease;
   }
   .stat-card-fun {
     background: #ffffff;
     border: 3px solid #E2E8F0;
-    box-shadow: 0 8px 0 #E2E8F0;
-    border-radius: 20px;
+    box-shadow: 0 6px 0 #E2E8F0;
+    border-radius: 18px;
     position: relative;
     overflow: hidden;
     transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -65,12 +65,12 @@
   }
 
   .progress-track {
-    height: 12px;
+    height: 10px;
     border-radius: 30px;
     background: #F1F5F9;
     border: 2px solid #E2E8F0;
     overflow: hidden;
-    min-width: 130px;
+    min-width: 100px;
     position: relative;
   }
   .progress-fill {
@@ -88,55 +88,56 @@
     animation: shimmer 1.5s infinite linear;
   }
 
-  .student-row {
+  /* Grid Tabel Desktop */
+  .student-row-desktop {
     display: grid;
-    grid-template-columns: 42px 1fr 180px 100px 70px 75px;
+    grid-template-columns: 38px 1fr 150px 90px 60px 70px;
     align-items: center;
-    gap: 16px;
-    padding: 14px 20px;
-    border-bottom: 3px solid #F1F5F9;
-    font-size: 14px;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 2px solid #F1F5F9;
+    font-size: 13px;
     transition: all 0.2s ease;
   }
-  .student-row:last-child { border-bottom: none; }
-  .student-row:hover {
+  .student-row-desktop:last-child { border-bottom: none; }
+  .student-row-desktop:hover {
     background: #F8FAFC;
     animation: pulseGlow 1.5s infinite alternate;
   }
 
   .avatar-zone {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 800;
     flex-shrink: 0;
     position: relative;
     border: 2px solid white;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
   .avatar-active::after {
     content: '';
     position: absolute;
-    inset: -4px;
+    inset: -3px;
     border-radius: 50%;
-    border: 3px solid #F59E0B;
+    border: 2px solid #F59E0B;
     animation: ping 1.2s ease-in-out infinite;
   }
   .avatar-done::after {
     content: '✓';
     position: absolute;
-    bottom: -3px;
-    right: -3px;
+    bottom: -2px;
+    right: -2px;
     background: #10B981;
     color: white;
-    font-size: 9px;
+    font-size: 8px;
     font-weight: 900;
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -148,12 +149,11 @@
   .badge-fun {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    font-size: 12px;
+    gap: 3px;
+    font-size: 11px;
     font-weight: 800;
-    padding: 5px 12px;
+    padding: 4px 10px;
     border-radius: 30px;
-    box-shadow: 0 3px 0 rgba(0,0,0,0.05);
   }
   .badge-done { background: #D1FAE5; color: #065F46; border: 1px solid #A7F3D0; }
   .badge-active { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; animation: float 2.5s ease-in-out infinite; }
@@ -162,38 +162,38 @@
   .leaderboard-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 10px 12px;
+    gap: 10px;
+    padding: 8px 10px;
     margin-bottom: 8px;
     background: #F8FAFC;
     border: 2px solid #E2E8F0;
-    box-shadow: 0 4px 0 #E2E8F0;
-    border-radius: 16px;
-    font-size: 14px;
+    box-shadow: 0 3px 0 #E2E8F0;
+    border-radius: 14px;
+    font-size: 13px;
     transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   .leaderboard-item:hover {
-    transform: scale(1.03);
+    transform: scale(1.02);
     background: #FFF;
   }
   .leaderboard-item .rank-badge {
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 900;
-    font-size: 14px;
+    font-size: 12px;
     border-radius: 50%;
   }
   
   .leaderboard-item .score-tag {
     margin-left: auto;
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 800;
     color: #0369A1;
     background: #E0F2FE;
-    padding: 3px 10px;
+    padding: 2px 8px;
     border-radius: 30px;
     border: 1px solid #BAE6FD;
   }
@@ -201,7 +201,6 @@
     background: linear-gradient(135deg, #FEF3C7, #FCD34D);
     color: #78350F;
     border: 1px solid #FDE68A;
-    box-shadow: 0 2px 5px rgba(251,191,36,0.3);
   }
 
   .confetti-container {
@@ -210,140 +209,138 @@
     pointer-events: none; z-index: 9999; overflow: hidden;
   }
   .confetti-piece {
-    position: absolute; width: 9px; height: 9px;
+    position: absolute; width: 8px; height: 8px;
     animation: confettiDrop 1.6s ease-out forwards;
   }
 
-  @media (max-width: 992px) {
-    .student-row {
-      grid-template-columns: 38px 1fr 120px 80px 50px 65px;
-      gap: 10px;
-      padding: 12px 14px;
-      font-size: 13px;
-    }
+  @keyframes spin {
+    0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)}
   }
 </style>
 @endsection
 
 @section('content')
-<div class="live-monitor" style="max-width:1280px; margin:0 auto; padding: 0 10px 2rem;">
+<div class="live-monitor max-w-7xl mx-auto px-0 sm:px-2 pb-8">
 
   {{-- Header Arena Live --}}
-  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:16px;">
-    <div style="display:flex; align-items:center; gap:16px; background:#FFF5F5; border:3px solid #FCA5A5; padding:10px 20px; border-radius:30px; box-shadow:0 6px 0 #FCA5A5;">
-      <div style="position:relative; width:16px; height:16px; flex-shrink:0;">
-        <div class="ping" style="position:absolute; inset:0; border-radius:50%; background:#EF4444; opacity:.6;"></div>
-        <div style="position:relative; width:16px; height:16px; border-radius:50%; background:#EF4444; box-shadow:0 0 15px #EF4444;"></div>
+  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 sm:mb-6">
+    <div class="flex items-center gap-3 bg-red-50 border-2 sm:border-3 border-red-300 px-3.5 py-2 rounded-full shadow-sm">
+      <div class="relative w-3.5 h-3.5 flex-shrink-0">
+        <div class="ping absolute inset-0 rounded-full bg-red-500 opacity-75"></div>
+        <div class="relative w-3.5 h-3.5 rounded-full bg-red-600 shadow-sm"></div>
       </div>
-      <div>
-        <span style="font-size:15px; font-weight:900; color:#EF4444; letter-spacing:0.8px;">ARENA LIVE MONITOR</span>
-        <span id="updated-at" style="font-size:13px; color:#7F1D1D; font-weight:700; margin-left:12px; opacity:0.75;"></span>
+      <div class="flex items-center gap-2">
+        <span class="text-xs sm:text-sm font-black text-red-600 tracking-wider">ARENA LIVE MONITOR</span>
+        <span id="updated-at" class="text-[11px] sm:text-xs text-red-800 font-bold opacity-75"></span>
       </div>
     </div>
     
-    <div style="display:flex; align-items:center; gap:14px;">
-      <span style="font-size:13px; color:#64748B; font-weight:700; background:#F1F5F9; padding:8px 14px; border-radius:30px;">
+    <div class="flex items-center gap-2.5 w-full sm:w-auto justify-between sm:justify-end">
+      <span class="text-[11px] sm:text-xs text-slate-500 font-bold bg-slate-100 px-3 py-1.5 rounded-full">
         🔄 Refresh tiap 4 detik
       </span>
       <a href="{{ url()->previous() }}"
-         style="font-size:14px; font-weight:800; color:#475569; text-decoration:none; display:flex; align-items:center; gap:6px; 
-                padding:8px 18px; border-radius:30px; background:#FFF; border:3px solid #E2E8F0; box-shadow:0 5px 0 #E2E8F0; transition:all 0.1s ease;"
-         onmousedown="this.style.transform='translateY(3px)'; this.style.boxShadow='0 2px 0 #E2E8F0';"
-         onmouseup="this.style.transform='translateY(0px)'; this.style.boxShadow='0 5px 0 #E2E8F0';"
-         onmouseleave="this.style.transform='translateY(0px)'; this.style.boxShadow='0 5px 0 #E2E8F0';">
-        <i class="ti ti-arrow-left" aria-hidden="true"></i> Keluar Arena
+         class="text-xs sm:text-sm font-bold text-slate-600 bg-white border-2 border-slate-200 px-3.5 py-1.5 rounded-full shadow-sm hover:bg-slate-50 active:scale-95 transition-all">
+        ← Keluar Arena
       </a>
     </div>
   </div>
 
   {{-- Informasi Kuis --}}
-  <div style="display:flex; align-items:center; gap:10px; margin-bottom:24px; padding:12px 20px; background:linear-gradient(135deg, #FFE4E6 0%, #FECDD3 100%); border-radius:18px; border:3px solid #FB7185; box-shadow:0 6px 0 #FB7185;">
-    <span style="font-size:20px;">📝</span>
-    <span style="font-size:15px; color:#881337; font-weight:900;">Kuis: {{ $quiz->title }}</span>
-    <span style="font-size:13px; background:#FFF; color:#E11D48; font-weight:800; padding:4px 12px; border-radius:30px; margin-left:auto; border:2px solid #FDA4AF;">
+  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-4 sm:mb-6 p-3 sm:p-4 bg-gradient-to-r from-rose-100 to-rose-200 rounded-2xl border-2 sm:border-3 border-rose-300 shadow-sm">
+    <div class="flex items-center gap-2">
+      <span class="text-lg sm:text-xl">📝</span>
+      <span class="text-xs sm:text-sm font-black text-rose-950">Kuis: {{ $quiz->title }}</span>
+    </div>
+    <span class="text-[11px] sm:text-xs bg-white text-rose-600 font-extrabold px-3 py-1 rounded-full border border-rose-300 self-start sm:self-auto">
       👥 {{ $quiz->participants_count ?? 0 }} Jagoan Terdaftar
     </span>
   </div>
 
   {{-- Grid Dasbor Statistik Makro --}}
-  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin-bottom:28px;">
-    <div class="stat-card-fun" style="border-color:#CBD5E1; box-shadow: 0 8px 0 #CBD5E1; padding:20px;">
-      <div style="display:flex; align-items:center; justify-content:space-between;">
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-5 sm:mb-7">
+    <div class="stat-card-fun border-slate-300 p-3.5 sm:p-5">
+      <div class="flex items-center justify-between">
         <div>
-          <p id="c-total" style="font-size:36px; font-weight:900; color:#1E293B; margin:0; line-height:1;">0</p>
-          <p style="font-size:13px; color:#64748B; margin:6px 0 0; font-weight:800;">Total Ikut</p>
+          <p id="c-total" class="text-2xl sm:text-3xl font-black text-slate-800 leading-none">0</p>
+          <p class="text-[11px] sm:text-xs font-bold text-slate-500 mt-1">Total Ikut</p>
         </div>
-        <div style="font-size:32px; background:#F1F5F9; width:54px; height:54px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #E2E8F0;">👥</div>
+        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-slate-100 rounded-full flex items-center justify-center border border-slate-200 text-lg sm:text-2xl">👥</div>
       </div>
     </div>
-    <div class="stat-card-fun" style="border-color:#FDE68A; box-shadow: 0 8px 0 #FDE68A; padding:20px;">
-      <div style="display:flex; align-items:center; justify-content:space-between;">
+
+    <div class="stat-card-fun border-amber-300 p-3.5 sm:p-5">
+      <div class="flex items-center justify-between">
         <div>
-          <p id="c-active" style="font-size:36px; font-weight:900; color:#D97706; margin:0; line-height:1;">0</p>
-          <p style="font-size:13px; color:#B45309; margin:6px 0 0; font-weight:800;">Mengerjakan</p>
+          <p id="c-active" class="text-2xl sm:text-3xl font-black text-amber-600 leading-none">0</p>
+          <p class="text-[11px] sm:text-xs font-bold text-amber-700 mt-1">Mengerjakan</p>
         </div>
-        <div style="font-size:32px; background:#FEF3C7; width:54px; height:54px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #FDE68A;">⚡</div>
+        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-amber-50 rounded-full flex items-center justify-center border border-amber-200 text-lg sm:text-2xl">⚡</div>
       </div>
     </div>
-    <div class="stat-card-fun" style="border-color:#A7F3D0; box-shadow: 0 8px 0 #A7F3D0; padding:20px;">
-      <div style="display:flex; align-items:center; justify-content:space-between;">
+
+    <div class="stat-card-fun border-emerald-300 p-3.5 sm:p-5">
+      <div class="flex items-center justify-between">
         <div>
-          <p id="c-done" style="font-size:36px; font-weight:900; color:#059669; margin:0; line-height:1;">0</p>
-          <p style="font-size:13px; color:#065F46; margin:6px 0 0; font-weight:800;">Sudah Selesai</p>
+          <p id="c-done" class="text-2xl sm:text-3xl font-black text-emerald-600 leading-none">0</p>
+          <p class="text-[11px] sm:text-xs font-bold text-emerald-800 mt-1">Sudah Selesai</p>
         </div>
-        <div style="font-size:32px; background:#D1FAE5; width:54px; height:54px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #A7F3D0;">✅</div>
+        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-emerald-50 rounded-full flex items-center justify-center border border-emerald-200 text-lg sm:text-2xl">✅</div>
       </div>
     </div>
-    <div class="stat-card-fun" style="border-color:#C7D2FE; box-shadow: 0 8px 0 #C7D2FE; padding:20px;">
-      <div style="display:flex; align-items:center; justify-content:space-between;">
+
+    <div class="stat-card-fun border-indigo-300 p-3.5 sm:p-5">
+      <div class="flex items-center justify-between">
         <div>
-          <p id="c-avg" style="font-size:36px; font-weight:900; color:#4F46E5; margin:0; line-height:1;">0</p>
-          <p style="font-size:13px; color:#3730A3; margin:6px 0 0; font-weight:800;">Rata-rata Skor</p>
+          <p id="c-avg" class="text-2xl sm:text-3xl font-black text-indigo-600 leading-none">0</p>
+          <p class="text-[11px] sm:text-xs font-bold text-indigo-800 mt-1">Rata-rata Skor</p>
         </div>
-        <div style="font-size:32px; background:#E0E7FF; width:54px; height:54px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #C7D2FE;">🎯</div>
+        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-indigo-50 rounded-full flex items-center justify-center border border-indigo-200 text-lg sm:text-2xl">🎯</div>
       </div>
     </div>
   </div>
 
   {{-- Grid Utama Pemantauan --}}
-  <div style="display:grid; grid-template-columns:1fr 320px; gap:24px; align-items:start;">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
 
-    {{-- Tabel Aktivitas Siswa --}}
-    <div class="card-gameplay">
-      <div style="padding:16px 20px; background:#F8FAFC; border-bottom:3px solid #E2E8F0; border-radius:20px 20px 0 0; display:flex; align-items:center; gap:10px;">
-        <span style="font-size:18px;">🏃‍♂️</span>
-        <span style="font-size:15px; font-weight:800; color:#1E293B;">Perjuangan Para Jagoan</span>
-        <span id="student-count" style="font-size:12px; font-weight:900; background:#4F46E5; color:white; padding:3px 12px; border-radius:30px; margin-left:auto; box-shadow:0 2px 4px rgba(79,70,229,0.2);">0</span>
+    {{-- Tabel Aktivitas Siswa (8 Kolom di Desktop) --}}
+    <div class="lg:col-span-8 card-gameplay overflow-hidden">
+      <div class="px-4 py-3 bg-slate-50 border-b-2 border-slate-200 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-base sm:text-lg">🏃‍♂️</span>
+          <span class="text-xs sm:text-sm font-extrabold text-slate-800">Perjuangan Para Jagoan</span>
+        </div>
+        <span id="student-count" class="text-[10px] sm:text-xs font-black bg-indigo-600 text-white px-2.5 py-0.5 rounded-full shadow-sm">0</span>
       </div>
       
-      {{-- Label Tabel Kolom --}}
-      <div class="student-row" style="background:#F8FAFC; font-size:12px; font-weight:800; color:#94A3B8; text-transform:uppercase; letter-spacing:.05em; border-bottom:2px solid #E2E8F0; padding:10px 20px;">
+      {{-- Label Tabel Kolom Desktop --}}
+      <div class="hidden sm:grid student-row-desktop bg-slate-50 font-bold text-[11px] text-slate-400 uppercase tracking-wider border-b-2 border-slate-200 px-4 py-2">
         <span></span>
         <span>Nama Siswa</span>
         <span>Progress Bar</span>
-        <span style="text-align:center;">Status</span>
-        <span style="text-align:center;">Skor</span>
-        <span style="text-align:center;">Jam Mulai</span>
+        <span class="text-center">Status</span>
+        <span class="text-center">Skor</span>
+        <span class="text-center">Jam Mulai</span>
       </div>
       
       {{-- Area Suntikan Data Realtime via JS --}}
-      <div id="student-list" style="max-height:560px; overflow-y:auto; padding: 4px 0;">
-        <div style="padding:60px 20px; text-align:center; color:#94A3B8;">
-          <i class="ti ti-loader" style="font-size:28px; display:block; margin-bottom:12px; animation:spin 1s linear infinite;" aria-hidden="true"></i>
-          <span style="font-size:14px; font-weight:700;">Mempersiapkan Arena Live...</span>
+      <div id="student-list" class="max-h-[520px] overflow-y-auto divide-y divide-slate-100 p-1 sm:p-0">
+        <div class="py-12 text-center text-slate-400">
+          <svg class="w-7 h-7 mx-auto mb-2 text-slate-300 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+          <span class="text-xs sm:text-sm font-bold">Mempersiapkan Arena Live...</span>
         </div>
       </div>
     </div>
 
-    {{-- Panel Pemimpin Turnamen (Leaderboard) --}}
-    <div class="card-gameplay" style="position:sticky; top:20px; border-color:#FDE68A; box-shadow:0 8px 0 #FDE68A;">
-      <div style="padding:16px 20px; background:linear-gradient(135deg, #FEFCE8 0%, #FEF3C7 100%); border-bottom:3px solid #FDE68A; border-radius:20px 20px 0 0; display:flex; align-items:center; gap:10px;">
-        <span style="font-size:20px;">👑</span>
-        <span style="font-size:15px; font-weight:900; color:#78350F;">Papan Bintang Top 8</span>
+    {{-- Panel Pemimpin Turnamen (Leaderboard) (4 Kolom di Desktop) --}}
+    <div class="lg:col-span-4 card-gameplay border-amber-300 shadow-sm sticky top-4">
+      <div class="px-4 py-3 bg-gradient-to-r from-amber-50 to-amber-100 border-b-2 border-amber-300 flex items-center gap-2">
+        <span class="text-base sm:text-lg">👑</span>
+        <span class="text-xs sm:text-sm font-black text-amber-900">Papan Bintang Top 8</span>
       </div>
-      <div style="padding:16px;">
-        <ul id="leaderboard-list" style="list-style:none; margin:0; padding:0;">
-          <li style="padding:30px 0; text-align:center; color:#94A3B8; font-size:14px; font-weight:700;">
+      <div class="p-3 sm:p-4">
+        <ul id="leaderboard-list" class="space-y-2">
+          <li class="py-8 text-center text-slate-400 text-xs font-bold">
             ⏳ Menunggu papan peringkat terisi...
           </li>
         </ul>
@@ -482,8 +479,8 @@
     // ── RENDER DAFTAR PERJUANGAN SISWA ──
     const listEl = document.getElementById('student-list');
     if (!students.length) {
-      listEl.innerHTML = `<div style="padding:60px 20px; text-align:center; color:#94A3B8; font-weight:700;">
-        <span style="font-size:36px; display:block; margin-bottom:10px;">💤</span>
+      listEl.innerHTML = `<div class="py-12 text-center text-slate-400 font-bold text-xs sm:text-sm">
+        <span class="text-3xl block mb-2">💤</span>
         <span>Belum ada ksatria yang memasuki arena kuis.</span>
       </div>`;
       return;
@@ -498,22 +495,50 @@
       const barClass = !finished && s.status !== 'menunggu' ? 'bar-active' : '';
       const avatarClass = getAvatarClass(s.status);
 
-      return `<div class="student-row${isNew ? ' row-new' : ''}">
+      return `
+      {{-- Mobile Card View --}}
+      <div class="block sm:hidden p-3 border-b border-slate-100 ${isNew ? 'row-new' : ''}">
+        <div class="flex items-center justify-between gap-2 mb-2">
+          <div class="flex items-center gap-2">
+            <div class="${avatarClass}" style="background:${bg};color:${fg}; font-weight:900;" aria-hidden="true">${esc(initials)}</div>
+            <div>
+              <span class="font-extrabold text-slate-800 text-xs block leading-tight">${esc(s.nama)}</span>
+              <span class="text-[10px] text-slate-400 font-medium">${esc(s.started_at) || '—'}</span>
+            </div>
+          </div>
+          <div>${getStatusBadge(s.status)}</div>
+        </div>
+
+        <div class="space-y-1">
+          <div class="flex justify-between items-center text-[10px] text-slate-500 font-bold">
+            <span>Progress (${s.answered || 0}/${s.total_soal || 0})</span>
+            <span class="${finished ? 'text-emerald-600 font-black' : 'text-slate-400'}">
+              Skor: ${s.score !== null ? `<span class="score-pop text-xs">${s.score}</span>` : '—'}
+            </span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill ${barClass}" style="width:${s.percent || 0}%; background:${fill};"></div>
+          </div>
+        </div>
+      </div>
+
+      {{-- Desktop Table Row View --}}
+      <div class="hidden sm:grid student-row-desktop ${isNew ? 'row-new' : ''}">
         <div class="${avatarClass}" style="background:${bg};color:${fg}; font-weight:900;" aria-hidden="true">${esc(initials)}</div>
-        <span style="font-weight:800; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#334155;" title="${esc(s.nama)}">${esc(s.nama)}</span>
+        <span class="font-bold text-slate-700 truncate" title="${esc(s.nama)}">${esc(s.nama)}</span>
         <div>
           <div class="progress-track">
             <div class="progress-fill ${barClass}" style="width:${s.percent || 0}%; background:${fill};"></div>
           </div>
-          <span style="font-size:11px; font-weight:700; color:#64748B; margin-top:4px; display:block;">
+          <span class="text-[10px] font-bold text-slate-500 mt-1 block">
             🎯 Terjawab ${s.answered || 0}/${s.total_soal || 0} Soal
           </span>
         </div>
-        <div style="text-align:center;">${getStatusBadge(s.status)}</div>
-        <div style="text-align:center; font-weight:900; font-size:16px; color:${finished ? '#059669' : '#94A3B8'};">
+        <div class="text-center">${getStatusBadge(s.status)}</div>
+        <div class="text-center font-black text-sm ${finished ? 'text-emerald-600' : 'text-slate-400'}">
           ${s.score !== null ? `<span class="score-pop">${s.score}</span>` : '—'}
         </div>
-        <div style="text-align:center; font-size:12px; font-weight:700; color:#64748B;">${esc(s.started_at) || '—'}</div>
+        <div class="text-center text-xs font-bold text-slate-500">${esc(s.started_at) || '—'}</div>
       </div>`;
     }).join('');
 
@@ -529,8 +554,8 @@
 
     const lbEl = document.getElementById('leaderboard-list');
     if (!sorted.length) {
-      lbEl.innerHTML = `<li style="padding:30px 0; text-align:center; color:#94A3B8; font-size:13px; font-weight:700;">
-        <span style="font-size:24px; display:block; margin-bottom:6px;">⏳</span>
+      lbEl.innerHTML = `<li class="py-8 text-center text-slate-400 text-xs font-bold">
+        <span class="text-2xl block mb-1">⏳</span>
         Belum ada skor yang masuk
       </li>`;
       return;
@@ -550,8 +575,8 @@
         <span class="rank-badge" style="background:${isTopThree ? medalBgs[i] : '#F1F5F9'};">
           ${isTopThree ? medals[i] : (i + 1)}
         </span>
-        <div class="avatar-zone" style="background:${bg};color:${fg};width:30px;height:30px;font-size:10px; font-weight:800;" aria-hidden="true">${esc(initials)}</div>
-        <span style="font-size:13px; font-weight:800; color:#334155; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;" title="${esc(s.nama)}">${esc(s.nama)}</span>
+        <div class="avatar-zone" style="background:${bg};color:${fg};width:28px;height:28px;font-size:10px; font-weight:800;" aria-hidden="true">${esc(initials)}</div>
+        <span class="text-xs font-bold text-slate-700 truncate flex-1" title="${esc(s.nama)}">${esc(s.nama)}</span>
         <span class="${scoreClass}">${s.score} Poin</span>
       </li>`;
     }).join('');
@@ -568,10 +593,4 @@
   setInterval(poll, POLL_MS);
 })();
 </script>
-
-<style>
-  @keyframes spin {
-    0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)}
-  }
-</style>
 @endsection

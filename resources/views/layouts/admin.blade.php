@@ -10,7 +10,7 @@
   <style>
     * { font-family: 'Inter', sans-serif; }
 
-    /* ── Sidebar ─────────────────────────────────── */
+    /* ── Sidebar & Responsive Drawer ─────────────────── */
     .sidebar-brand-sub {
       font-size: 9px;
       letter-spacing: 1.6px;
@@ -53,7 +53,7 @@
     }
 
     /* ── Scrollbar ───────────────────────────────── */
-    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-thumb { background: #c8d5cc; border-radius: 2px; }
 
     /* ── Focus ───────────────────────────────────── */
@@ -71,218 +71,229 @@
     @yield('styles')
   </style>
 </head>
-<body style="background:#f8f7f4; display:flex; height:100vh; overflow:hidden;">
+<body class="bg-[#f8f7f4] flex flex-col md:flex-row h-screen overflow-hidden text-slate-800">
 
-  <aside style="width:200px; background:#1a3a2e; display:flex; flex-direction:column; flex-shrink:0; overflow-y:auto;">
+  {{-- Mobile Backdrop Overlay --}}
+  <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/50 z-40 hidden md:hidden backdrop-blur-sm transition-opacity"></div>
+
+  {{-- Sidebar Navigasi --}}
+  <aside id="sidebar-menu" class="fixed md:static inset-y-0 left-0 z-50 w-52 bg-[#1a3a2e] flex flex-col flex-shrink-0 transform -translate-x-full md:translate-x-0 transition-transform duration-200 ease-in-out overflow-y-auto">
 
     {{-- Gold stripe ornament --}}
     <div style="height:3px; background:repeating-linear-gradient(90deg, transparent, transparent 5px, rgba(212,168,67,0.4) 5px, rgba(212,168,67,0.4) 6px);"></div>
 
     {{-- Logo --}}
-    <div style="padding:20px 18px 16px; border-bottom:1px solid rgba(255,255,255,0.08);">
-      <div style="display:flex; align-items:center; gap:9px;">
-        <div style="width:28px; height:28px; border-radius:7px; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; flex-shrink:0; padding:4px;">
-          <img src="{{ asset('img/logo.png') }}" alt="Logo HafalQu" style="width:100%; height:100%; object-fit:contain;">
+    <div class="p-4 sm:p-5 border-b border-white/10 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0 p-1">
+          <img src="{{ asset('img/logo.png') }}" alt="Logo HafalQu" class="w-full h-full object-contain">
         </div>
         <div>
-          <div style="font-size:14px; font-weight:700; color:#fff; letter-spacing:0.2px; line-height:1;">HafalQU</div>
+          <div class="text-sm font-bold text-white tracking-wide leading-none">HafalQU</div>
           <div class="sidebar-brand-sub">Administrator</div>
         </div>
       </div>
+      <button onclick="toggleSidebar()" class="md:hidden text-slate-400 hover:text-white p-1">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
     </div>
 
     {{-- User info --}}
-    <div style="padding:12px 18px 14px; border-bottom:1px solid rgba(255,255,255,0.08);">
-      <div style="display:flex; align-items:center; gap:9px; background:rgba(255,255,255,0.06); border-radius:8px; padding:8px 10px;">
-        <div style="width:30px; height:30px; border-radius:50%; background:#d4a843; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#5a3200; flex-shrink:0;">
+    <div class="px-3.5 py-3 border-b border-white/10">
+      <div class="flex items-center gap-2.5 bg-white/5 rounded-xl p-2">
+        <div class="w-7 h-7 rounded-full bg-[#d4a843] flex items-center justify-center text-xs font-bold text-[#5a3200] flex-shrink-0">
           {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
         </div>
-        <div style="min-width:0;">
-          <div style="font-size:12px; font-weight:600; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+        <div class="min-w-0 flex-1">
+          <div class="text-xs font-semibold text-white truncate">
             {{ Auth::user()->name ?? 'Admin' }}
           </div>
-          <div style="font-size:10px; color:#8ab89e; margin-top:1px;">Administrator</div>
+          <div class="text-[10px] text-[#8ab89e] mt-0.5">Administrator</div>
         </div>
       </div>
     </div>
 
     {{-- Navigation --}}
-    <nav style="flex:1; padding:10px 8px;">
-      <p style="font-size:9px; font-weight:600; letter-spacing:1.4px; text-transform:uppercase; color:#6a9a7e; padding:0 10px 8px;">Menu</p>
+    <nav class="flex-1 px-2 py-2.5 space-y-0.5">
+      <p class="text-[9px] font-bold tracking-widest uppercase text-[#6a9a7e] px-2.5 pb-2">Menu</p>
 
       <a href="{{ route('admin.dashboard') }}"
-         class="nav-item {{ request()->routeIs('admin.dashboard') ? 'nav-active' : '' }}"
-         style="display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:7px; font-size:12px; font-weight:500; color:#b0cfc0; text-decoration:none; margin-bottom:1px;">
-        <svg style="width:15px;height:15px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+         class="nav-item flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium text-[#b0cfc0] text-decoration-none {{ request()->routeIs('admin.dashboard') ? 'nav-active' : '' }}">
+        <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
           <rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
         </svg>
-        Dashboard
+        <span>Dashboard</span>
       </a>
 
       <a href="{{ route('admin.guru.index') }}"
-         class="nav-item {{ request()->routeIs('admin.guru.*') ? 'nav-active' : '' }}"
-         style="display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:7px; font-size:12px; font-weight:500; color:#b0cfc0; text-decoration:none; margin-bottom:1px;">
-        <svg style="width:15px;height:15px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+         class="nav-item flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium text-[#b0cfc0] text-decoration-none {{ request()->routeIs('admin.guru.*') ? 'nav-active' : '' }}">
+        <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
           <circle cx="9" cy="7" r="4"/>
           <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
         </svg>
-        Akun Guru
+        <span>Akun Guru</span>
       </a>
 
       <a href="{{ route('admin.kelas.index') }}"
-         class="nav-item {{ request()->routeIs('admin.kelas.*') ? 'nav-active' : '' }}"
-         style="display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:7px; font-size:12px; font-weight:500; color:#b0cfc0; text-decoration:none; margin-bottom:1px;">
-        <svg style="width:15px;height:15px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+         class="nav-item flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium text-[#b0cfc0] text-decoration-none {{ request()->routeIs('admin.kelas.*') ? 'nav-active' : '' }}">
+        <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
           <polyline points="9 22 9 12 15 12 15 22"/>
         </svg>
-        Data Kelas
+        <span>Data Kelas</span>
       </a>
 
       <a href="{{ route('admin.siswa.kelasList') }}"
-         class="nav-item {{ request()->routeIs('admin.siswa.*') ? 'nav-active' : '' }}"
-         style="display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:7px; font-size:12px; font-weight:500; color:#b0cfc0; text-decoration:none; margin-bottom:1px;">
-        <svg style="width:15px;height:15px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+         class="nav-item flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium text-[#b0cfc0] text-decoration-none {{ request()->routeIs('admin.siswa.*') ? 'nav-active' : '' }}">
+        <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
           <circle cx="12" cy="7" r="4"/>
         </svg>
-        Akun Siswa
+        <span>Akun Siswa</span>
       </a>
 
       <a href="{{ route('admin.soal.index') }}"
-         class="nav-item {{ request()->routeIs('admin.soal.*') ? 'nav-active' : '' }}"
-         style="display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:7px; font-size:12px; font-weight:500; color:#b0cfc0; text-decoration:none; margin-bottom:1px;">
-        <svg style="width:15px;height:15px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+         class="nav-item flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium text-[#b0cfc0] text-decoration-none {{ request()->routeIs('admin.soal.*') ? 'nav-active' : '' }}">
+        <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
           <rect x="9" y="3" width="6" height="4" rx="1"/>
           <line x1="9" y1="12" x2="15" y2="12"/>
           <line x1="9" y1="16" x2="13" y2="16"/>
         </svg>
-        Bank Soal
+        <span>Bank Soal</span>
       </a>
 
       <a href="{{ route('admin.lencana.index') }}"
-         class="nav-item {{ request()->routeIs('admin.lencana.*') ? 'nav-active' : '' }}"
-         style="display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:7px; font-size:12px; font-weight:500; color:#b0cfc0; text-decoration:none; margin-bottom:1px;">
-        <svg style="width:15px;height:15px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
-          <rect x="9" y="3" width="6" height="4" rx="1"/>
-          <line x1="9" y1="12" x2="15" y2="12"/>
-          <line x1="9" y1="16" x2="13" y2="16"/>
+         class="nav-item flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium text-[#b0cfc0] text-decoration-none {{ request()->routeIs('admin.lencana.*') ? 'nav-active' : '' }}">
+        <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="12" cy="8" r="7"/>
+          <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
         </svg>
-        Daftar Lencana
+        <span>Daftar Lencana</span>
       </a>
 
       <a href="#"
-         class="nav-item {{ request()->routeIs('admin.laporan.*') ? 'nav-active' : '' }}"
-         style="display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:7px; font-size:12px; font-weight:500; color:#b0cfc0; text-decoration:none; margin-bottom:1px;">
-        <svg style="width:15px;height:15px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+         class="nav-item flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium text-[#b0cfc0] text-decoration-none {{ request()->routeIs('admin.laporan.*') ? 'nav-active' : '' }}">
+        <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
           <polyline points="14 2 14 8 20 8"/>
           <line x1="16" y1="13" x2="8" y2="13"/>
           <line x1="16" y1="17" x2="8" y2="17"/>
         </svg>
-        Kelola Laporan
+        <span>Kelola Laporan</span>
       </a>
     </nav>
 
     {{-- Logout --}}
-    <div style="padding:10px 8px 16px; border-top:1px solid rgba(255,255,255,0.08);">
+    <div class="p-2 pb-4 border-t border-white/10">
       <form action="{{ route('logout') }}" method="POST" id="admin-logout-form">
         @csrf
-        {{-- Invalidate session on logout --}}
         <input type="hidden" name="_logout_invalidate" value="1">
         <button type="button" onclick="confirmLogout()"
-          class="nav-item"
-          style="display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:7px; font-size:12px; font-weight:500; color:#c07a74; background:none; border-top:none; border-right:none; border-bottom:none; cursor:pointer; width:100%; text-align:left;">
-          <svg style="width:15px;height:15px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          class="nav-item flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-semibold text-[#c07a74] hover:bg-white/5 w-full text-left transition-colors">
+          <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
             <polyline points="16 17 21 12 16 7"/>
             <line x1="21" y1="12" x2="9" y2="12"/>
           </svg>
-          Keluar
+          <span>Keluar</span>
         </button>
       </form>
     </div>
 
   </aside>
 
-  <main style="flex:1; display:flex; flex-direction:column; overflow-y:auto;">
+  {{-- Area Utama Content --}}
+  <main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+
+    {{-- Mobile Top Bar Header --}}
+    <div class="md:hidden bg-[#1a3a2e] text-white px-4 py-3 flex items-center justify-between shadow-sm flex-shrink-0">
+      <div class="flex items-center gap-2.5">
+        <button onclick="toggleSidebar()" class="p-1 rounded-md text-slate-300 hover:text-white hover:bg-white/10">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <span class="font-bold text-sm tracking-wide">HafalQU Admin</span>
+      </div>
+      <div class="w-7 h-7 rounded-full bg-[#d4a843] flex items-center justify-center text-xs font-bold text-[#5a3200]">
+        {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
+      </div>
+    </div>
 
     {{-- Page Header --}}
     @section('header')
-    <header class="page-header" style="padding:18px 28px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0;">
+    <header class="page-header px-4 sm:px-7 py-4 sm:py-4.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 flex-shrink-0">
       <div>
-        <h1 style="font-size:16px; font-weight:700; color:#1e3a2a; letter-spacing:-0.2px;">
+        <h1 class="text-sm sm:text-base font-bold text-[#1e3a2a] tracking-tight">
           @yield('page_title', 'Dashboard')
         </h1>
-        <p style="font-size:12px; color:#6b7c74; margin-top:2px;">
+        <p class="text-xs text-[#6b7c74] mt-0.5">
           @yield('page_subtitle', '')
         </p>
       </div>
-      <div>@yield('header_actions')</div>
+      <div class="flex items-center gap-2">@yield('header_actions')</div>
     </header>
     @show
 
     {{-- Flash: Success --}}
     @if(session('success'))
-      <div class="flash-success" style="margin:16px 28px 0; display:flex; align-items:center; gap:10px; padding:10px 14px; border-radius:9px; font-size:13px;">
-        <svg style="width:16px;height:16px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <div class="flash-success mx-4 sm:mx-7 mt-4 flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm">
+        <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polyline points="20 6 9 17 4 12"/>
         </svg>
-        {{ session('success') }}
+        <span>{{ session('success') }}</span>
       </div>
     @endif
 
     {{-- Flash: Error --}}
     @if(session('error'))
-      <div class="flash-error" style="margin:16px 28px 0; display:flex; align-items:center; gap:10px; padding:10px 14px; border-radius:9px; font-size:13px;">
-        <svg style="width:16px;height:16px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <div class="flash-error mx-4 sm:mx-7 mt-4 flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm">
+        <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
         </svg>
-        {{ session('error') }}
+        <span>{{ session('error') }}</span>
       </div>
     @endif
 
     {{-- Validation errors --}}
     @if($errors->any())
-      <div class="flash-error" style="margin:16px 28px 0; padding:10px 14px; border-radius:9px; font-size:13px;">
+      <div class="flash-error mx-4 sm:mx-7 mt-4 p-3.5 rounded-xl text-xs sm:text-sm">
         @foreach($errors->all() as $error)
-          <div style="display:flex; align-items:center; gap:7px; {{ !$loop->first ? 'margin-top:4px;' : '' }}">
-            <span style="width:5px; height:5px; background:#b83232; border-radius:50%; flex-shrink:0;"></span>
-            {{ $error }}
+          <div class="flex items-center gap-2 {{ !$loop->first ? 'mt-1' : '' }}">
+            <span class="w-1.5 h-1.5 bg-[#b83232] rounded-full flex-shrink-0"></span>
+            <span>{{ $error }}</span>
           </div>
         @endforeach
       </div>
     @endif
 
     {{-- Main page content --}}
-    <div style="flex:1; padding:22px 28px;">
+    <div class="flex-1 p-4 sm:p-7">
       @yield('content')
     </div>
 
   </main>
 
-  <div id="logout-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:9999; align-items:center; justify-content:center;">
-    <div style="background:#fff; border-radius:14px; padding:28px 28px 24px; width:320px; box-shadow:0 20px 60px rgba(0,0,0,0.15);">
-      <div style="width:44px; height:44px; border-radius:50%; background:#fdf2f2; display:flex; align-items:center; justify-content:center; margin-bottom:14px;">
-        <svg style="width:20px;height:20px;color:#b83232;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+  {{-- Modal Confirm Logout --}}
+  <div id="logout-modal" class="hidden fixed inset-0 bg-slate-900/60 z-50 items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-xs shadow-xl">
+      <div class="w-11 h-11 rounded-full bg-red-50 flex items-center justify-center mb-3.5">
+        <svg class="w-5 h-5 text-[#b83232]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
           <polyline points="16 17 21 12 16 7"/>
           <line x1="21" y1="12" x2="9" y2="12"/>
         </svg>
       </div>
-      <p style="font-size:15px; font-weight:700; color:#1e3a2a; margin-bottom:6px;">Keluar dari HafalQU?</p>
-      <p style="font-size:13px; color:#6b7c74; margin-bottom:22px; line-height:1.5;">Sesi kamu akan diakhiri dan kamu perlu login kembali untuk melanjutkan.</p>
-      <div style="display:flex; gap:10px;">
+      <p class="text-sm font-bold text-[#1e3a2a] mb-1">Keluar dari HafalQU?</p>
+      <p class="text-xs text-[#6b7c74] mb-5 leading-relaxed">Sesi kamu akan diakhiri dan kamu perlu login kembali untuk melanjutkan.</p>
+      <div class="flex gap-2">
         <button onclick="closeLogout()"
-          style="flex:1; padding:9px; border-radius:8px; border:1px solid #ddd; background:#fff; font-size:13px; font-weight:500; color:#4a5a52; cursor:pointer;">
+          class="flex-1 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors">
           Batal
         </button>
         <button onclick="document.getElementById('admin-logout-form').submit()"
-          style="flex:1; padding:9px; border-radius:8px; border:none; background:#1a3a2e; font-size:13px; font-weight:600; color:#fff; cursor:pointer;">
+          class="flex-1 py-2.5 rounded-xl border-none bg-[#1a3a2e] text-xs font-semibold text-white hover:bg-[#122820] transition-colors shadow-sm">
           Ya, Keluar
         </button>
       </div>
@@ -293,11 +304,23 @@
   @yield('modals')
 
   <script>
-    function confirmLogout() {
-      document.getElementById('logout-modal').style.display = 'flex';
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar-menu');
+      const overlay = document.getElementById('sidebar-overlay');
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
     }
+
+    function confirmLogout() {
+      const modal = document.getElementById('logout-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
     function closeLogout() {
-      document.getElementById('logout-modal').style.display = 'none';
+      const modal = document.getElementById('logout-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
     }
 
     // Close logout modal on backdrop click

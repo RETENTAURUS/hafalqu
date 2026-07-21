@@ -7,11 +7,7 @@
 @section('content')
 
 @php
-  // Nama kelas diambil langsung dari relasi guru yang login, bukan hardcode.
-  // Sesuaikan 'nama' di bawah jika kolom pada tabel kelas Anda bernama berbeda
-  // (misal 'nama_kelas').
   $namaKelas = auth()->user()->kelas?->nama ?? 'Anda';
-
   $top3     = $leaderboard->take(3)->values();
   $rank4to6 = $leaderboard->slice(3)->values();
 @endphp
@@ -78,7 +74,7 @@
           <p class="gd-panel-title">Peringkat Kelas {{ $namaKelas }}</p>
           <p class="gd-panel-sub">Berdasarkan poin hafalan terkumpul</p>
         </div>
-        <button type="button" class="gd-link-btn">Lihat Semua</button>
+        <a href="{{ route('guru.siswa.index') }}" class="gd-link-btn text-decoration-none">Lihat Semua</a>
       </div>
 
       @if($leaderboard->isEmpty())
@@ -89,9 +85,9 @@
           @if($top3->count() >= 2)
             <div class="gd-podium-col">
               <div class="gd-medallion gd-medallion--silver gd-medallion--sm">
-                {{ substr($top3[1]->name, 0, 2) }}
+                {{ strtoupper(substr($top3[1]->name, 0, 2)) }}
               </div>
-              <p class="gd-podium-name">{{ $top3[1]->name }}</p>
+              <p class="gd-podium-name" title="{{ $top3[1]->name }}">{{ $top3[1]->name }}</p>
               <p class="gd-podium-poin">{{ number_format($top3[1]->points) }} poin</p>
               <div class="gd-podium-block gd-podium-block--silver">2</div>
             </div>
@@ -100,10 +96,10 @@
           @if($top3->count() >= 1)
             <div class="gd-podium-col gd-podium-col--first">
               <div class="gd-medallion gd-medallion--gold gd-medallion--lg">
-                {{ substr($top3[0]->name, 0, 2) }}
+                {{ strtoupper(substr($top3[0]->name, 0, 2)) }}
                 <span class="gd-medallion-star">✦</span>
               </div>
-              <p class="gd-podium-name gd-podium-name--first">{{ $top3[0]->name }}</p>
+              <p class="gd-podium-name gd-podium-name--first" title="{{ $top3[0]->name }}">{{ $top3[0]->name }}</p>
               <p class="gd-podium-poin gd-podium-poin--first">{{ number_format($top3[0]->points) }} poin</p>
               <div class="gd-podium-block gd-podium-block--gold">1</div>
             </div>
@@ -112,9 +108,9 @@
           @if($top3->count() >= 3)
             <div class="gd-podium-col">
               <div class="gd-medallion gd-medallion--bronze gd-medallion--sm">
-                {{ substr($top3[2]->name, 0, 2) }}
+                {{ strtoupper(substr($top3[2]->name, 0, 2)) }}
               </div>
-              <p class="gd-podium-name">{{ $top3[2]->name }}</p>
+              <p class="gd-podium-name" title="{{ $top3[2]->name }}">{{ $top3[2]->name }}</p>
               <p class="gd-podium-poin">{{ number_format($top3[2]->points) }} poin</p>
               <div class="gd-podium-block gd-podium-block--bronze">3</div>
             </div>
@@ -127,7 +123,7 @@
           @foreach($rank4to6 as $siswa)
             <div class="gd-rank-row">
               <span class="gd-rank-num">{{ $loop->iteration + 3 }}</span>
-              <div class="gd-rank-avatar">{{ substr($siswa->name, 0, 2) }}</div>
+              <div class="gd-rank-avatar">{{ strtoupper(substr($siswa->name, 0, 2)) }}</div>
               <span class="gd-rank-name">{{ $siswa->name }}</span>
               <span class="gd-rank-poin">{{ number_format($siswa->points) }} poin</span>
             </div>
@@ -144,22 +140,21 @@
       <div class="gd-panel">
         <p class="gd-panel-title gd-panel-title--sm">Aksi Cepat</p>
         <div class="gd-quick-grid">
-          {{-- Sesuaikan route(...) di bawah dengan nama route asli pada routes/web.php --}}
           <a href="{{ route('guru.quiz.index') }}" class="gd-quick-btn">
             <span class="gd-quick-icon">📝</span>
             <span>Buat Quiz</span>
           </a>
-          <a href="#" class="gd-quick-btn">
+          <a href="{{ route('guru.soal.index') }}" class="gd-quick-btn">
             <span class="gd-quick-icon">📋</span>
             <span>Bank Soal</span>
           </a>
-          <a href="#" class="gd-quick-btn">
-            <span class="gd-quick-icon">🏅</span>
-            <span>Atur Lencana</span>
+          <a href="{{ route('guru.siswa.index') }}" class="gd-quick-btn">
+            <span class="gd-quick-icon">👥</span>
+            <span>Data Siswa</span>
           </a>
-          <a href="#" class="gd-quick-btn">
-            <span class="gd-quick-icon">📥</span>
-            <span>Unduh Laporan</span>
+          <a href="{{ route('guru.quiz.index') }}" class="gd-quick-btn">
+            <span class="gd-quick-icon">📊</span>
+            <span>Hasil Quiz</span>
           </a>
         </div>
       </div>
@@ -171,7 +166,7 @@
           @forelse($lencanaList as $lencana)
             <div class="gd-lencana-row">
               <span class="gd-lencana-icon">{{ $lencana->icon ?? '🏅' }}</span>
-              <span>{{ $lencana->name }}</span>
+              <span class="truncate">{{ $lencana->name }}</span>
             </div>
           @empty
             <div class="gd-empty gd-empty--sm">Belum ada lencana.</div>
@@ -189,7 +184,7 @@
   --ink: #1F2A24;
   --sage: #6E8577;
   --emerald-900: #0F2E22;
-  --emerald-700: #1B5E3B;
+  --emerald-700: #115E59;
   --emerald-100: #E4F0E9;
   --sand: #FAF6EC;
   --gold: #B8860B;
@@ -202,123 +197,155 @@
 }
 
 /* ── Header ── */
-.gd-header { margin-bottom: 26px; }
+.gd-header { margin-bottom: 20px; }
 .gd-eyebrow {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--emerald-700); margin-bottom: 8px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--emerald-700); margin-bottom: 6px;
 }
 .gd-title {
-  font-family: 'Amiri', serif; font-weight: 700; font-size: 30px; color: var(--emerald-900);
-  line-height: 1.2; margin-bottom: 6px;
+  font-family: 'Amiri', serif; font-weight: 700; font-size: 24px; color: var(--emerald-900);
+  line-height: 1.2; margin-bottom: 4px;
 }
-.gd-subtitle { font-size: 13.5px; color: var(--sage); }
+.gd-subtitle { font-size: 12px; color: var(--sage); }
+
+@media (min-width: 640px) {
+  .gd-header { margin-bottom: 26px; }
+  .gd-title { font-size: 30px; margin-bottom: 6px; }
+  .gd-subtitle { font-size: 13.5px; }
+}
 
 /* ── Stat cards ── */
-.gd-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 22px; }
+.gd-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
 .gd-stat-card {
-  background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 20px 20px 18px;
+  background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 16px;
   animation: gd-rise 0.5s ease both; animation-delay: var(--delay, 0s);
 }
-.gd-stat-value { font-size: 30px; font-weight: 800; color: var(--emerald-900); line-height: 1; margin-top: 14px; font-variant-numeric: tabular-nums; }
-.gd-stat-unit { font-size: 16px; font-weight: 700; color: var(--sage); }
-.gd-stat-label { font-size: 12px; color: var(--sage); font-weight: 600; margin-top: 4px; }
+.gd-stat-value { font-size: 24px; font-weight: 800; color: var(--emerald-900); line-height: 1; margin-top: 10px; font-variant-numeric: tabular-nums; }
+.gd-stat-unit { font-size: 14px; font-weight: 700; color: var(--sage); }
+.gd-stat-label { font-size: 11px; color: var(--sage); font-weight: 600; margin-top: 4px; }
+
+@media (min-width: 768px) {
+  .gd-stats { grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 22px; }
+  .gd-stat-card { padding: 20px 20px 18px; }
+  .gd-stat-value { font-size: 30px; margin-top: 14px; }
+  .gd-stat-unit { font-size: 16px; }
+  .gd-stat-label { font-size: 12px; }
+}
 
 /* ── Medali oktagon (elemen ciri khas) ── */
 .gd-medallion {
-  width: 44px; height: 44px;
+  width: 40px; height: 40px;
   clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
   display: flex; align-items: center; justify-content: center;
   color: #fff; font-weight: 700; font-size: 12px; position: relative; flex-shrink: 0;
 }
-.gd-medallion svg { width: 20px; height: 20px; }
+.gd-medallion svg { width: 18px; height: 18px; }
 .gd-medallion--blue   { background: linear-gradient(145deg,#3b6fa8,#274d7c); }
 .gd-medallion--gold   { background: linear-gradient(145deg,var(--gold),#8f6607); }
 .gd-medallion--sage   { background: linear-gradient(145deg,var(--emerald-700),var(--emerald-900)); }
 .gd-medallion--silver { background: linear-gradient(145deg,#a7b1b8,#6d7880); }
 .gd-medallion--bronze { background: linear-gradient(145deg,var(--bronze),#8a5527); }
-.gd-medallion--sm { width: 46px; height: 46px; font-size: 14px; margin-bottom: 8px; }
-.gd-medallion--lg { width: 60px; height: 60px; font-size: 18px; margin-bottom: 8px; box-shadow: 0 0 0 4px var(--gold-soft); }
+.gd-medallion--sm { width: 40px; height: 40px; font-size: 12px; margin-bottom: 6px; }
+.gd-medallion--lg { width: 52px; height: 52px; font-size: 16px; margin-bottom: 6px; box-shadow: 0 0 0 3px var(--gold-soft); }
+
+@media (min-width: 640px) {
+  .gd-medallion { width: 44px; height: 44px; }
+  .gd-medallion svg { width: 20px; height: 20px; }
+  .gd-medallion--sm { width: 46px; height: 46px; font-size: 14px; margin-bottom: 8px; }
+  .gd-medallion--lg { width: 60px; height: 60px; font-size: 18px; margin-bottom: 8px; box-shadow: 0 0 0 4px var(--gold-soft); }
+}
+
 .gd-medallion-star {
-  position: absolute; top: -10px; right: -6px; color: var(--gold); font-size: 15px;
+  position: absolute; top: -8px; right: -4px; color: var(--gold); font-size: 13px;
   filter: drop-shadow(0 1px 1px rgba(0,0,0,0.15));
 }
 
 /* ── Grid bawah ── */
-.gd-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 18px; align-items: start; }
-.gd-panel { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 22px; }
+.gd-grid { display: grid; grid-template-columns: 1fr; gap: 16px; align-items: start; }
+.gd-panel { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 16px; }
 .gd-panel--grow { flex: 1; }
-.gd-side { display: flex; flex-direction: column; gap: 18px; }
+.gd-side { display: flex; flex-direction: column; gap: 16px; }
 
-.gd-panel-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
-.gd-panel-title { font-family: 'Amiri', serif; font-weight: 700; font-size: 17px; color: var(--emerald-900); }
-.gd-panel-title--sm { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 700; margin-bottom: 14px; }
-.gd-panel-sub { font-size: 11.5px; color: var(--sage); margin-top: 3px; }
+@media (min-width: 900px) {
+  .gd-grid { grid-template-columns: 2fr 1fr; gap: 18px; }
+  .gd-panel { padding: 22px; }
+  .gd-side { gap: 18px; }
+}
+
+.gd-panel-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
+.gd-panel-title { font-family: 'Amiri', serif; font-weight: 700; font-size: 16px; color: var(--emerald-900); }
+.gd-panel-title--sm { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 700; margin-bottom: 12px; }
+.gd-panel-sub { font-size: 11px; color: var(--sage); margin-top: 2px; }
 .gd-link-btn {
-  font-size: 11.5px; font-weight: 700; color: var(--emerald-700);
+  font-size: 11px; font-weight: 700; color: var(--emerald-700);
   border: 1px solid var(--emerald-700); background: none; border-radius: 8px;
-  padding: 6px 12px; cursor: pointer; transition: all .15s;
+  padding: 5px 10px; cursor: pointer; transition: all .15s; display: inline-block;
 }
 .gd-link-btn:hover { background: var(--emerald-700); color: #fff; }
 
-.gd-empty { text-align: center; padding: 30px 10px; color: var(--sage); font-size: 12.5px; }
-.gd-empty--sm { padding: 16px 10px; }
+.gd-empty { text-align: center; padding: 24px 10px; color: var(--sage); font-size: 12px; }
+.gd-empty--sm { padding: 14px 10px; }
 
 /* ── Podium ── */
-.gd-podium { display: flex; align-items: flex-end; justify-content: center; gap: 18px; margin-bottom: 24px; }
+.gd-podium { display: flex; align-items: flex-end; justify-content: center; gap: 10px; margin-bottom: 20px; }
 .gd-podium-col { display: flex; flex-direction: column; align-items: center; }
-.gd-podium-name { font-size: 12px; font-weight: 600; color: #3d4b43; text-align: center; max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gd-podium-name { font-size: 11px; font-weight: 600; color: #3d4b43; text-align: center; max-width: 75px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .gd-podium-name--first { font-weight: 700; color: var(--emerald-900); }
-.gd-podium-poin { font-size: 11px; color: var(--sage); margin-bottom: 10px; }
+.gd-podium-poin { font-size: 10px; color: var(--sage); margin-bottom: 6px; }
 .gd-podium-poin--first { color: var(--gold); font-weight: 700; }
 .gd-podium-block {
-  width: 74px; border-radius: 10px 10px 0 0; display: flex; align-items: flex-start; justify-content: center;
-  padding-top: 8px; font-family: 'Amiri', serif; font-weight: 700; font-size: 20px; color: #fff;
+  width: 62px; border-radius: 10px 10px 0 0; display: flex; align-items: flex-start; justify-content: center;
+  padding-top: 6px; font-family: 'Amiri', serif; font-weight: 700; font-size: 18px; color: #fff;
 }
-.gd-podium-block--silver { height: 78px; background: linear-gradient(180deg,#9aa5ac,#6d7880); }
-.gd-podium-block--gold   { height: 104px; background: linear-gradient(180deg,var(--gold),#8f6607); }
-.gd-podium-block--bronze { height: 60px; background: linear-gradient(180deg,var(--bronze),#8a5527); }
+.gd-podium-block--silver { height: 60px; background: linear-gradient(180deg,#9aa5ac,#6d7880); }
+.gd-podium-block--gold   { height: 84px; background: linear-gradient(180deg,var(--gold),#8f6607); }
+.gd-podium-block--bronze { height: 48px; background: linear-gradient(180deg,var(--bronze),#8a5527); }
+
+@media (min-width: 640px) {
+  .gd-podium { gap: 18px; margin-bottom: 24px; }
+  .gd-podium-name { font-size: 12px; max-width: 90px; }
+  .gd-podium-poin { font-size: 11px; margin-bottom: 10px; }
+  .gd-podium-block { width: 74px; font-size: 20px; padding-top: 8px; }
+  .gd-podium-block--silver { height: 78px; }
+  .gd-podium-block--gold   { height: 104px; }
+  .gd-podium-block--bronze { height: 60px; }
+}
 
 /* ── Rank list 4-6 ── */
-.gd-rank-list { border-top: 1px solid var(--line); padding-top: 8px; }
-.gd-rank-row { display: flex; align-items: center; gap: 12px; padding: 11px 4px; border-bottom: 1px solid #f4f1ea; }
+.gd-rank-list { border-top: 1px solid var(--line); padding-top: 6px; }
+.gd-rank-row { display: flex; align-items: center; gap: 10px; padding: 9px 4px; border-bottom: 1px solid #f4f1ea; }
 .gd-rank-row:last-child { border-bottom: none; }
-.gd-rank-num { font-size: 12.5px; font-weight: 700; color: #b4ab98; width: 16px; }
+.gd-rank-num { font-size: 11.5px; font-weight: 700; color: #b4ab98; width: 14px; }
 .gd-rank-avatar {
-  width: 32px; height: 32px; border-radius: 50%; background: var(--emerald-100); color: var(--emerald-700);
-  display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0;
+  width: 28px; height: 28px; border-radius: 50%; background: var(--emerald-100); color: var(--emerald-700);
+  display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0;
 }
-.gd-rank-name { flex: 1; font-size: 13px; font-weight: 500; color: #3d4b43; }
-.gd-rank-poin { font-size: 12.5px; font-weight: 700; color: var(--emerald-700); }
+.gd-rank-name { flex: 1; font-size: 12px; font-weight: 600; color: #3d4b43; truncate: true; }
+.gd-rank-poin { font-size: 11.5px; font-weight: 700; color: var(--emerald-700); }
 
 /* ── Aksi Cepat ── */
-.gd-quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.gd-quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .gd-quick-btn {
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
   background: var(--sand); border: 1px solid var(--line); border-radius: 12px;
-  padding: 16px 8px; font-size: 12px; font-weight: 600; color: var(--emerald-900);
-  text-decoration: none; transition: all .15s;
+  padding: 12px 6px; font-size: 11px; font-weight: 600; color: var(--emerald-900);
+  text-decoration: none; transition: all .15s; text-align: center;
 }
 .gd-quick-btn:hover { background: var(--emerald-700); color: #fff; border-color: var(--emerald-700); }
-.gd-quick-icon { font-size: 19px; }
+.gd-quick-icon { font-size: 18px; }
 
 /* ── Lencana list ── */
 .gd-lencana-list { display: flex; flex-direction: column; gap: 8px; }
 .gd-lencana-row {
-  display: flex; align-items: center; gap: 12px; padding: 12px 14px;
-  background: var(--sand); border-radius: 10px; font-size: 13px; font-weight: 500; color: #3d4b43;
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  background: var(--sand); border-radius: 10px; font-size: 12px; font-weight: 600; color: #3d4b43;
 }
-.gd-lencana-icon { font-size: 18px; }
+.gd-lencana-icon { font-size: 16px; }
 
 /* ── Motion ── */
-@keyframes gd-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes gd-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) {
   .gd-stat-card { animation: none; }
-}
-
-/* ── Responsif ── */
-@media (max-width: 900px) {
-  .gd-stats { grid-template-columns: 1fr 1fr; }
-  .gd-grid { grid-template-columns: 1fr; }
 }
 </style>
 

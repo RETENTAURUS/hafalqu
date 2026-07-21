@@ -1,5 +1,3 @@
-@extends('layouts.siswa')
-
 @section('title', 'Mengerjakan Quiz — HafalQU')
 @section('page_title', 'Quiz')
 @section('page_subtitle', '')

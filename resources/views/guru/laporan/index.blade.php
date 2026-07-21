@@ -3,24 +3,24 @@
 @section('title', 'Laporan Rekap Kelas — HafalQU')
 
 @section('breadcrumb')
-  <svg style="width:15px;height:15px;color:#6b7c74;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-  <span style="color:#6b7c74;">Laporan</span>
-  <svg style="width:13px;height:13px;color:#c8d5cc;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <svg class="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+  <span class="text-slate-500">Laporan</span>
+  <svg class="w-3 h-3 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
   <span>Rekap Kelas</span>
 @endsection
 
 @section('header_actions')
-  <div style="display:flex;gap:8px;">
+  <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
     <a href="{{ route('guru.laporan.export-pdf', request()->query()) }}"
        target="_blank"
-       style="display:inline-flex;align-items:center;gap:6px;background:#b83232;color:#fff;font-size:12px;font-weight:600;padding:8px 14px;border-radius:8px;text-decoration:none;">
-      <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      Export PDF
+       class="inline-flex items-center justify-center gap-1.5 bg-red-700 hover:bg-red-800 active:bg-red-900 text-white text-xs font-semibold px-3.5 py-2.5 sm:py-2 rounded-xl sm:rounded-lg transition-colors shadow-sm">
+      <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span>Export PDF</span>
     </a>
     <a href="{{ route('guru.laporan.export-excel', request()->query()) }}"
-       style="display:inline-flex;align-items:center;gap:6px;background:#1a5e3a;color:#fff;font-size:12px;font-weight:600;padding:8px 14px;border-radius:8px;text-decoration:none;">
-      <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-      Export Excel
+       class="inline-flex items-center justify-center gap-1.5 bg-emerald-800 hover:bg-emerald-900 active:bg-emerald-950 text-white text-xs font-semibold px-3.5 py-2.5 sm:py-2 rounded-xl sm:rounded-lg transition-colors shadow-sm">
+      <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      <span>Export Excel</span>
     </a>
   </div>
 @endsection
@@ -29,12 +29,12 @@
 
 {{-- ═══ Filter Bar ═══ --}}
 <form method="GET" action="{{ route('guru.laporan.index') }}"
-      style="background:#fff;border:1px solid #e8e4dc;border-radius:10px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-bottom:20px;">
+      class="bg-white border border-slate-200/80 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row flex-wrap gap-3 sm:gap-4 items-stretch md:items-end mb-4 sm:mb-6 shadow-sm">
 
-  <div style="display:flex;flex-direction:column;gap:4px;">
-    <label style="font-size:11px;font-weight:600;color:#6b7c74;text-transform:uppercase;letter-spacing:0.8px;">Kelas</label>
+  <div class="flex flex-col gap-1.5 flex-1 min-w-[140px]">
+    <label class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Kelas</label>
     <select name="kelas_id"
-            style="border:1px solid #ddd;border-radius:7px;padding:7px 10px;font-size:13px;color:#1e3a2a;background:#fff;min-width:140px;">
+            class="w-full border border-slate-200 rounded-xl px-3 py-2.5 sm:py-2 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600">
       <option value="">Semua Kelas</option>
       @foreach($kelasList as $k)
         <option value="{{ $k->id }}" {{ $kelasId == $k->id ? 'selected' : '' }}>{{ $k->nama }}</option>
@@ -42,79 +42,79 @@
     </select>
   </div>
 
-  <div style="display:flex;flex-direction:column;gap:4px;">
-    <label style="font-size:11px;font-weight:600;color:#6b7c74;text-transform:uppercase;letter-spacing:0.8px;">Periode</label>
+  <div class="flex flex-col gap-1.5 flex-1 min-w-[140px]">
+    <label class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Periode</label>
     <select name="periode" id="periode-select" onchange="toggleCustomDate(this.value)"
-            style="border:1px solid #ddd;border-radius:7px;padding:7px 10px;font-size:13px;color:#1e3a2a;background:#fff;">
+            class="w-full border border-slate-200 rounded-xl px-3 py-2.5 sm:py-2 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600">
       <option value="bulan_ini" {{ $periode=='bulan_ini' ? 'selected' : '' }}>Bulan Ini</option>
       <option value="semester"  {{ $periode=='semester'  ? 'selected' : '' }}>Semester Ini</option>
       <option value="custom"    {{ $periode=='custom'    ? 'selected' : '' }}>Pilih Tanggal</option>
     </select>
   </div>
 
-  <div id="custom-date" style="display:{{ $periode=='custom' ? 'flex' : 'none' }};gap:8px;align-items:flex-end;">
-    <div style="display:flex;flex-direction:column;gap:4px;">
-      <label style="font-size:11px;font-weight:600;color:#6b7c74;">Dari</label>
+  <div id="custom-date" class="{{ $periode=='custom' ? 'flex' : 'hidden' }} flex-col sm:flex-row gap-2.5 items-stretch sm:items-end flex-1">
+    <div class="flex flex-col gap-1.5 flex-1">
+      <label class="text-[11px] font-semibold text-slate-500">Dari</label>
       <input type="date" name="date_from" value="{{ $dateFrom }}"
-             style="border:1px solid #ddd;border-radius:7px;padding:7px 10px;font-size:13px;">
+             class="w-full border border-slate-200 rounded-xl px-3 py-2 sm:py-1.5 text-xs sm:text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600">
     </div>
-    <div style="display:flex;flex-direction:column;gap:4px;">
-      <label style="font-size:11px;font-weight:600;color:#6b7c74;">Sampai</label>
+    <div class="flex flex-col gap-1.5 flex-1">
+      <label class="text-[11px] font-semibold text-slate-500">Sampai</label>
       <input type="date" name="date_to" value="{{ $dateTo }}"
-             style="border:1px solid #ddd;border-radius:7px;padding:7px 10px;font-size:13px;">
+             class="w-full border border-slate-200 rounded-xl px-3 py-2 sm:py-1.5 text-xs sm:text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600">
     </div>
   </div>
 
   <button type="submit"
-          style="background:#1a3a2e;color:#fff;border:none;border-radius:7px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;">
+          class="bg-[#1a3a2e] hover:bg-[#11271f] active:bg-[#0a1813] text-white font-semibold rounded-xl px-5 py-2.5 sm:py-2 text-xs sm:text-sm transition-colors shadow-sm mt-1 md:mt-0">
     Tampilkan
   </button>
 </form>
 
 {{-- ═══ Summary Cards ═══ --}}
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
   @php
     $cards = [
-      ['label'=>'Total Siswa',    'value'=>$summary['total_siswa'],                    'unit'=>'siswa',  'color'=>'#1a3a2e', 'bg'=>'#e1f5f0'],
-      ['label'=>'Rata-rata Skor', 'value'=>$summary['avg_class_score'],                'unit'=>'/ 100',  'color'=>'#7a5a1a', 'bg'=>'#fdf3e0'],
-      ['label'=>'Siswa Aktif',    'value'=>$summary['persen_aktif'].'%',               'unit'=>'aktif',  'color'=>'#1a5e3a', 'bg'=>'#d6f0e4'],
-      ['label'=>'Tingkat Lulus',  'value'=>$summary['persen_lulus'].'%',               'unit'=>'lulus',  'color'=>'#1a3a8e', 'bg'=>'#e6f1fb'],
+      ['label'=>'Total Siswa',    'value'=>$summary['total_siswa'],                  'unit'=>'siswa',  'color'=>'text-[#1a3a2e]', 'bg'=>'bg-teal-50/60'],
+      ['label'=>'Rata-rata Skor', 'value'=>$summary['avg_class_score'],                'unit'=>'/ 100',  'color'=>'text-amber-800', 'bg'=>'bg-amber-50/60'],
+      ['label'=>'Siswa Aktif',    'value'=>$summary['persen_aktif'].'%',               'unit'=>'aktif',  'color'=>'text-emerald-800', 'bg'=>'bg-emerald-50/60'],
+      ['label'=>'Tingkat Lulus',  'value'=>$summary['persen_lulus'].'%',               'unit'=>'lulus',  'color'=>'text-blue-900', 'bg'=>'bg-blue-50/60'],
     ];
   @endphp
   @foreach($cards as $card)
-  <div style="background:#fff;border-radius:10px;border:1px solid #e8e4dc;padding:16px;">
-    <p style="font-size:11px;font-weight:600;color:#6b7c74;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:6px;">{{ $card['label'] }}</p>
-    <p style="font-size:28px;font-weight:800;color:{{ $card['color'] }};line-height:1;">{{ $card['value'] }}</p>
-    <p style="font-size:11px;color:#a09882;margin-top:3px;">{{ $card['unit'] }}</p>
+  <div class="bg-white rounded-2xl border border-slate-200/80 p-4 sm:p-5 shadow-sm flex flex-col justify-between">
+    <p class="text-[10px] sm:text-[11px] font-semibold text-slate-400 tracking-wider uppercase mb-1 sm:mb-2">{{ $card['label'] }}</p>
+    <p class="text-2xl sm:text-3xl font-extrabold {{ $card['color'] }} leading-tight">{{ $card['value'] }}</p>
+    <p class="text-[10px] sm:text-xs text-slate-400 mt-1">{{ $card['unit'] }}</p>
   </div>
   @endforeach
 </div>
 
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4 sm:mb-6">
 
   {{-- ═══ Panel: Distribusi Nilai ═══ --}}
-  <div style="background:#fff;border-radius:10px;border:1px solid #e8e4dc;overflow:hidden;">
-    <div style="padding:14px 16px 12px;border-bottom:1px solid #f0ede6;display:flex;align-items:center;justify-content:space-between;">
-      <span style="font-size:13px;font-weight:700;color:#1e3a2a;">Distribusi Nilai</span>
-      <span style="font-size:11px;color:#a09882;">{{ $distribusi['total'] }} percobaan</span>
+  <div class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm flex flex-col justify-between">
+    <div class="px-4 sm:px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+      <span class="text-xs sm:text-sm font-bold text-slate-800">Distribusi Nilai</span>
+      <span class="text-[11px] sm:text-xs text-slate-400">{{ $distribusi['total'] }} percobaan</span>
     </div>
-    <div style="padding:16px;">
+    <div class="p-4 sm:p-5 space-y-3.5">
       @php
         $total = max($distribusi['total'], 1);
         $bars = [
-          ['label'=>'Sempurna (100)',    'val'=>$distribusi['sempurna'],    'color'=>'#d4a843', 'bg'=>'#fdf3e0'],
-          ['label'=>'Lulus',             'val'=>$distribusi['lulus'],       'color'=>'#2d7a5f', 'bg'=>'#e1f5f0'],
-          ['label'=>'Tidak Lulus',       'val'=>$distribusi['tidak_lulus'], 'color'=>'#b83232', 'bg'=>'#fdf2f2'],
+          ['label'=>'Sempurna (100)',    'val'=>$distribusi['sempurna'],    'color'=>'bg-amber-500', 'text'=>'text-amber-700'],
+          ['label'=>'Lulus',             'val'=>$distribusi['lulus'],       'color'=>'bg-emerald-600', 'text'=>'text-emerald-700'],
+          ['label'=>'Tidak Lulus',       'val'=>$distribusi['tidak_lulus'], 'color'=>'bg-red-600', 'text'=>'text-red-700'],
         ];
       @endphp
       @foreach($bars as $bar)
-      <div style="margin-bottom:12px;">
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-          <span style="font-size:12px;color:#3d4a42;">{{ $bar['label'] }}</span>
-          <span style="font-size:12px;font-weight:600;color:{{ $bar['color'] }};">{{ $bar['val'] }} <span style="font-weight:400;color:#a09882;">({{ $total > 0 ? round($bar['val']/$total*100) : 0 }}%)</span></span>
+      <div>
+        <div class="flex justify-between items-center text-xs mb-1.5">
+          <span class="text-slate-700 font-medium">{{ $bar['label'] }}</span>
+          <span class="font-bold {{ $bar['text'] }}">{{ $bar['val'] }} <span class="font-normal text-slate-400">({{ $total > 0 ? round($bar['val']/$total*100) : 0 }}%)</span></span>
         </div>
-        <div style="height:8px;background:#f0ede6;border-radius:4px;overflow:hidden;">
-          <div style="height:100%;background:{{ $bar['color'] }};border-radius:4px;width:{{ $total > 0 ? min(round($bar['val']/$total*100), 100) : 0 }}%;transition:width 0.6s ease;"></div>
+        <div class="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+          <div class="h-full {{ $bar['color'] }} rounded-full transition-all duration-500" style="width: {{ $total > 0 ? min(round($bar['val']/$total*100), 100) : 0 }}%;"></div>
         </div>
       </div>
       @endforeach
@@ -122,11 +122,11 @@
   </div>
 
   {{-- ═══ Panel: Aktivitas Siswa ═══ --}}
-  <div style="background:#fff;border-radius:10px;border:1px solid #e8e4dc;overflow:hidden;">
-    <div style="padding:14px 16px 12px;border-bottom:1px solid #f0ede6;">
-      <span style="font-size:13px;font-weight:700;color:#1e3a2a;">Aktivitas Siswa</span>
+  <div class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm">
+    <div class="px-4 sm:px-5 py-3.5 border-b border-slate-100">
+      <span class="text-xs sm:text-sm font-bold text-slate-800">Aktivitas Siswa</span>
     </div>
-    <div style="padding:16px;display:flex;align-items:center;gap:20px;">
+    <div class="p-4 sm:p-5 flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
       {{-- Donut chart via SVG --}}
       @php
         $totalSiswa = max($aktivitas['total_siswa'], 1);
@@ -137,25 +137,29 @@
         $dashAktif  = ($pAktif / 100) * $circ;
         $dashBelum  = $circ - $dashAktif;
       @endphp
-      <svg width="110" height="110" viewBox="0 0 110 110" style="flex-shrink:0;">
-        <circle cx="55" cy="55" r="{{ $r }}" fill="none" stroke="#f0ede6" stroke-width="12"/>
-        <circle cx="55" cy="55" r="{{ $r }}" fill="none" stroke="#2d7a5f" stroke-width="12"
+      <svg width="100" height="100" viewBox="0 0 110 110" class="flex-shrink-0">
+        <circle cx="55" cy="55" r="{{ $r }}" fill="none" stroke="#f1f5f9" stroke-width="12"/>
+        <circle cx="55" cy="55" r="{{ $r }}" fill="none" stroke="#059669" stroke-width="12"
                 stroke-dasharray="{{ $dashAktif }} {{ $dashBelum }}"
                 stroke-dashoffset="{{ $circ / 4 }}"
                 stroke-linecap="round"/>
-        <text x="55" y="50" text-anchor="middle" style="font-size:18px;font-weight:800;fill:#1e3a2a;">{{ $pAktif }}%</text>
-        <text x="55" y="66" text-anchor="middle" style="font-size:11px;fill:#6b7c74;">aktif</text>
+        <text x="55" y="50" text-anchor="middle" class="text-lg font-extrabold fill-slate-800">{{ $pAktif }}%</text>
+        <text x="55" y="66" text-anchor="middle" class="text-[11px] fill-slate-400">aktif</text>
       </svg>
-      <div style="flex:1;">
-        <div style="display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid #f5f2ec;">
-          <div style="width:10px;height:10px;border-radius:50%;background:#2d7a5f;flex-shrink:0;"></div>
-          <span style="font-size:13px;color:#3d4a42;flex:1;">Aktif</span>
-          <span style="font-size:14px;font-weight:700;color:#2d7a5f;">{{ $aktivitas['aktif'] }}</span>
+      <div class="flex-1 w-full space-y-2">
+        <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl">
+          <div class="flex items-center gap-2">
+            <div class="w-2.5 h-2.5 rounded-full bg-emerald-600"></div>
+            <span class="text-xs text-slate-700 font-medium">Aktif Mengerjakan</span>
+          </div>
+          <span class="text-xs font-bold text-emerald-700">{{ $aktivitas['aktif'] }}</span>
         </div>
-        <div style="display:flex;align-items:center;gap:8px;padding:10px 0;">
-          <div style="width:10px;height:10px;border-radius:50%;background:#d0cbc2;flex-shrink:0;"></div>
-          <span style="font-size:13px;color:#3d4a42;flex:1;">Belum</span>
-          <span style="font-size:14px;font-weight:700;color:#a09882;">{{ $aktivitas['belum'] }}</span>
+        <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl">
+          <div class="flex items-center gap-2">
+            <div class="w-2.5 h-2.5 rounded-full bg-slate-300"></div>
+            <span class="text-xs text-slate-700 font-medium">Belum Mengerjakan</span>
+          </div>
+          <span class="text-xs font-bold text-slate-400">{{ $aktivitas['belum'] }}</span>
         </div>
       </div>
     </div>
@@ -164,105 +168,152 @@
 </div>
 
 {{-- ═══ Panel: Quiz Rata-rata Terendah ═══ --}}
-<div style="background:#fff;border-radius:10px;border:1px solid #e8e4dc;overflow:hidden;margin-bottom:16px;">
-  <div style="padding:14px 16px 12px;border-bottom:1px solid #f0ede6;display:flex;align-items:center;justify-content:space-between;">
-    <span style="font-size:13px;font-weight:700;color:#1e3a2a;">Statistik Quiz (Diurutkan dari Nilai Terendah)</span>
+<div class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden mb-4 sm:mb-6 shadow-sm">
+  <div class="px-4 sm:px-5 py-3.5 border-b border-slate-100">
+    <span class="text-xs sm:text-sm font-bold text-slate-800">Statistik Quiz (Diurutkan dari Nilai Terendah)</span>
   </div>
   @if($quizStats->count())
-  <div style="overflow-x:auto;">
-    <table style="width:100%;border-collapse:collapse;font-size:12px;">
-      <thead>
-        <tr style="background:#faf8f5;border-bottom:1px solid #f0ede6;">
-          <th style="padding:10px 16px;text-align:left;font-weight:600;color:#6b7c74;">Quiz</th>
-          <th style="padding:10px 16px;text-align:center;font-weight:600;color:#6b7c74;">Rata-rata</th>
-          <th style="padding:10px 16px;text-align:center;font-weight:600;color:#6b7c74;">Percobaan</th>
-          <th style="padding:10px 16px;text-align:center;font-weight:600;color:#6b7c74;">Passing</th>
-          <th style="padding:10px 16px;text-align:center;font-weight:600;color:#6b7c74;">% Lulus</th>
-          <th style="padding:10px 16px;text-align:left;font-weight:600;color:#6b7c74;">Bar</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach($quizStats as $q)
-        @php
-          $scoreColor = $q['avg_score'] >= 80 ? '#2d7a5f' : ($q['avg_score'] >= 60 ? '#a06900' : '#b83232');
-          $barColor   = $q['avg_score'] >= 80 ? '#2d7a5f' : ($q['avg_score'] >= 60 ? '#d4a843' : '#b83232');
-        @endphp
-        <tr style="border-bottom:1px solid #f5f2ec;">
-          <td style="padding:10px 16px;color:#2d3a33;font-weight:500;">{{ $q['title'] }}</td>
-          <td style="padding:10px 16px;text-align:center;font-weight:700;color:{{ $scoreColor }};">{{ $q['avg_score'] }}</td>
-          <td style="padding:10px 16px;text-align:center;color:#6b7c74;">{{ $q['total_attempts'] }}</td>
-          <td style="padding:10px 16px;text-align:center;color:#6b7c74;">{{ $q['passing_score'] }}</td>
-          <td style="padding:10px 16px;text-align:center;color:{{ $scoreColor }};font-weight:600;">{{ $q['persen_lulus'] }}%</td>
-          <td style="padding:10px 16px;min-width:120px;">
-            <div style="height:6px;background:#f0ede6;border-radius:3px;overflow:hidden;">
-              <div style="height:100%;background:{{ $barColor }};border-radius:3px;width:{{ min($q['avg_score'], 100) }}%;"></div>
-            </div>
-          </td>
-        </tr>
-        @endforeach
-      </tbody>
-    </table>
-  </div>
+
+    {{-- MOBILE CARD VIEW --}}
+    <div class="block md:hidden divide-y divide-slate-100">
+      @foreach($quizStats as $q)
+      @php
+        $scoreColor = $q['avg_score'] >= 80 ? 'text-emerald-700' : ($q['avg_score'] >= 60 ? 'text-amber-700' : 'text-red-600');
+        $barColor   = $q['avg_score'] >= 80 ? 'bg-emerald-600' : ($q['avg_score'] >= 60 ? 'bg-amber-500' : 'bg-red-600');
+      @endphp
+      <div class="p-4 space-y-2.5">
+        <div class="flex justify-between items-start gap-2">
+          <h4 class="font-semibold text-slate-800 text-xs sm:text-sm leading-snug">{{ $q['title'] }}</h4>
+          <span class="text-xs font-bold {{ $scoreColor }} bg-slate-50 px-2 py-0.5 rounded-md border border-slate-100 flex-shrink-0">
+            Avg: {{ $q['avg_score'] }}
+          </span>
+        </div>
+        <div class="flex justify-between text-[11px] text-slate-500 pt-1">
+          <span>Percobaan: <strong>{{ $q['total_attempts'] }}</strong></span>
+          <span>Passing: <strong>{{ $q['passing_score'] }}</strong></span>
+          <span>Lulus: <strong class="{{ $scoreColor }}">{{ $q['persen_lulus'] }}%</strong></span>
+        </div>
+        <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+          <div class="h-full {{ $barColor }} rounded-full" style="width: {{ min($q['avg_score'], 100) }}%;"></div>
+        </div>
+      </div>
+      @endforeach
+    </div>
+
+    {{-- DESKTOP TABLE VIEW --}}
+    <div class="hidden md:block overflow-x-auto">
+      <table class="w-full text-left border-collapse text-xs sm:text-sm">
+        <thead>
+          <tr class="bg-slate-50 border-b border-slate-100 text-slate-500 font-semibold">
+            <th class="py-3 px-5">Quiz</th>
+            <th class="py-3 px-5 text-center">Rata-rata</th>
+            <th class="py-3 px-5 text-center">Percobaan</th>
+            <th class="py-3 px-5 text-center">Passing</th>
+            <th class="py-3 px-5 text-center">% Lulus</th>
+            <th class="py-3 px-5">Progres</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 text-slate-700">
+          @foreach($quizStats as $q)
+          @php
+            $scoreColor = $q['avg_score'] >= 80 ? 'text-emerald-700' : ($q['avg_score'] >= 60 ? 'text-amber-700' : 'text-red-600');
+            $barColor   = $q['avg_score'] >= 80 ? 'bg-emerald-600' : ($q['avg_score'] >= 60 ? 'bg-amber-500' : 'bg-red-600');
+          @endphp
+          <tr class="hover:bg-slate-50/50 transition-colors">
+            <td class="py-3.5 px-5 font-medium text-slate-800">{{ $q['title'] }}</td>
+            <td class="py-3.5 px-5 text-center font-bold {{ $scoreColor }}">{{ $q['avg_score'] }}</td>
+            <td class="py-3.5 px-5 text-center text-slate-500">{{ $q['total_attempts'] }}</td>
+            <td class="py-3.5 px-5 text-center text-slate-500">{{ $q['passing_score'] }}</td>
+            <td class="py-3.5 px-5 text-center font-semibold {{ $scoreColor }}">{{ $q['persen_lulus'] }}%</td>
+            <td class="py-3.5 px-5 min-w-[120px]">
+              <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full {{ $barColor }} rounded-full" style="width: {{ min($q['avg_score'], 100) }}%;"></div>
+              </div>
+            </td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
   @else
-    <div style="padding:28px;text-align:center;color:#a09882;font-size:13px;">Belum ada data quiz untuk periode ini.</div>
+    <div class="p-8 text-center text-slate-400 text-xs sm:text-sm">Belum ada data quiz untuk periode ini.</div>
   @endif
 </div>
 
 {{-- ═══ Panel: Tabel Ranking ═══ --}}
-<div style="background:#fff;border-radius:10px;border:1px solid #e8e4dc;overflow:hidden;">
-  <div style="padding:14px 16px 12px;border-bottom:1px solid #f0ede6;">
-    <span style="font-size:13px;font-weight:700;color:#1e3a2a;">Ranking Siswa</span>
+<div class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm">
+  <div class="px-4 sm:px-5 py-3.5 border-b border-slate-100">
+    <span class="text-xs sm:text-sm font-bold text-slate-800">Ranking Siswa</span>
   </div>
   @if($ranking->count())
-  <div style="overflow-x:auto;">
-    <table style="width:100%;border-collapse:collapse;font-size:12px;">
-      <thead>
-        <tr style="background:#faf8f5;border-bottom:1px solid #f0ede6;">
-          <th style="padding:10px 16px;text-align:center;font-weight:600;color:#6b7c74;width:50px;">#</th>
-          <th style="padding:10px 16px;text-align:left;font-weight:600;color:#6b7c74;">Nama Siswa</th>
-          <th style="padding:10px 16px;text-align:center;font-weight:600;color:#6b7c74;">Total Poin</th>
-          <th style="padding:10px 16px;text-align:center;font-weight:600;color:#6b7c74;">Rata-rata Skor</th>
-          <th style="padding:10px 16px;text-align:center;font-weight:600;color:#6b7c74;">Skor Terbaik</th>
-          <th style="padding:10px 16px;text-align:center;font-weight:600;color:#6b7c74;">Quiz Selesai</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach($ranking as $r)
-        <tr style="border-bottom:1px solid #f5f2ec;{{ $loop->first ? 'background:#fffdf7;' : '' }}">
-          <td style="padding:10px 16px;text-align:center;">
-            @if($r['rank'] == 1)
-              <span style="font-size:15px;">🥇</span>
-            @elseif($r['rank'] == 2)
-              <span style="font-size:15px;">🥈</span>
-            @elseif($r['rank'] == 3)
-              <span style="font-size:15px;">🥉</span>
-            @else
-              <span style="font-weight:600;color:#a09882;">#{{ $r['rank'] }}</span>
-            @endif
-          </td>
-          <td style="padding:10px 16px;">
-            <div style="display:flex;align-items:center;gap:9px;">
-              <div style="width:28px;height:28px;border-radius:50%;background:#d4a843;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#5a3200;flex-shrink:0;">
-                {{ strtoupper(substr($r['name'], 0, 1)) }}
+
+    {{-- MOBILE CARD VIEW --}}
+    <div class="block md:hidden divide-y divide-slate-100">
+      @foreach($ranking as $r)
+      <div class="p-4 flex items-center justify-between gap-3 {{ $loop->first ? 'bg-amber-50/30' : '' }}">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs flex-shrink-0">
+            @if($r['rank'] == 1) 🥇 @elseif($r['rank'] == 2) 🥈 @elseif($r['rank'] == 3) 🥉 @else <span class="text-slate-400">#{{ $r['rank'] }}</span> @endif
+          </div>
+          <div>
+            <h4 class="font-semibold text-slate-800 text-xs sm:text-sm">{{ $r['name'] }}</h4>
+            <p class="text-[11px] text-slate-400 mt-0.5">
+              Rata-rata: <span class="font-semibold {{ $r['avg_score'] >= 70 ? 'text-emerald-700' : 'text-red-600' }}">{{ $r['avg_score'] }}</span> · Terbaik: {{ $r['best_score'] }}
+            </p>
+          </div>
+        </div>
+        <div class="text-right flex-shrink-0">
+          <span class="text-xs font-extrabold text-[#1a3a2e] block">{{ $r['points'] }} Pts</span>
+          <span class="bg-emerald-50 text-emerald-700 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-block mt-0.5">
+            {{ $r['quiz_dikerjakan'] }} quiz
+          </span>
+        </div>
+      </div>
+      @endforeach
+    </div>
+
+    {{-- DESKTOP TABLE VIEW --}}
+    <div class="hidden md:block overflow-x-auto">
+      <table class="w-full text-left border-collapse text-xs sm:text-sm">
+        <thead>
+          <tr class="bg-slate-50 border-b border-slate-100 text-slate-500 font-semibold">
+            <th class="py-3 px-5 text-center w-12">#</th>
+            <th class="py-3 px-5">Nama Siswa</th>
+            <th class="py-3 px-5 text-center">Total Poin</th>
+            <th class="py-3 px-5 text-center">Rata-rata Skor</th>
+            <th class="py-3 px-5 text-center">Skor Terbaik</th>
+            <th class="py-3 px-5 text-center">Quiz Selesai</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 text-slate-700">
+          @foreach($ranking as $r)
+          <tr class="hover:bg-slate-50/50 transition-colors {{ $loop->first ? 'bg-amber-50/20' : '' }}">
+            <td class="py-3.5 px-5 text-center font-bold">
+              @if($r['rank'] == 1) 🥇 @elseif($r['rank'] == 2) 🥈 @elseif($r['rank'] == 3) 🥉 @else <span class="text-slate-400">#{{ $r['rank'] }}</span> @endif
+            </td>
+            <td class="py-3.5 px-5">
+              <div class="flex items-center gap-2.5">
+                <div class="w-7 h-7 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center text-xs font-bold flex-shrink-0">
+                  {{ strtoupper(substr($r['name'], 0, 1)) }}
+                </div>
+                <span class="font-medium text-slate-800">{{ $r['name'] }}</span>
               </div>
-              <span style="font-weight:500;color:#2d3a33;">{{ $r['name'] }}</span>
-            </div>
-          </td>
-          <td style="padding:10px 16px;text-align:center;font-weight:700;color:#1a3a2e;">{{ $r['points'] }}</td>
-          <td style="padding:10px 16px;text-align:center;color:{{ $r['avg_score'] >= 70 ? '#2d7a5f' : '#b83232' }};font-weight:600;">{{ $r['avg_score'] }}</td>
-          <td style="padding:10px 16px;text-align:center;color:#6b7c74;">{{ $r['best_score'] }}</td>
-          <td style="padding:10px 16px;text-align:center;">
-            <span style="background:#e1f5f0;color:#1a7a5e;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;">
-              {{ $r['quiz_dikerjakan'] }}
-            </span>
-          </td>
-        </tr>
-        @endforeach
-      </tbody>
-    </table>
-  </div>
+            </td>
+            <td class="py-3.5 px-5 text-center font-bold text-[#1a3a2e]">{{ $r['points'] }}</td>
+            <td class="py-3.5 px-5 text-center font-semibold {{ $r['avg_score'] >= 70 ? 'text-emerald-700' : 'text-red-600' }}">{{ $r['avg_score'] }}</td>
+            <td class="py-3.5 px-5 text-center text-slate-500">{{ $r['best_score'] }}</td>
+            <td class="py-3.5 px-5 text-center">
+              <span class="bg-emerald-50 text-emerald-700 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                {{ $r['quiz_dikerjakan'] }}
+              </span>
+            </td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
   @else
-    <div style="padding:28px;text-align:center;color:#a09882;font-size:13px;">Belum ada data siswa untuk periode ini.</div>
+    <div class="p-8 text-center text-slate-400 text-xs sm:text-sm">Belum ada data siswa untuk periode ini.</div>
   @endif
 </div>
 
@@ -271,7 +322,14 @@
 @section('scripts')
 <script>
 function toggleCustomDate(val) {
-  document.getElementById('custom-date').style.display = val === 'custom' ? 'flex' : 'none';
+  const customDateEl = document.getElementById('custom-date');
+  if (val === 'custom') {
+    customDateEl.classList.remove('hidden');
+    customDateEl.classList.add('flex');
+  } else {
+    customDateEl.classList.remove('flex');
+    customDateEl.classList.add('hidden');
+  }
 }
 </script>
 @endsection
